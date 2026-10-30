@@ -1,0 +1,1423 @@
+[
+  {
+    "rpc": "SearchBusinessPartners",
+    "description": "Textové vyhľadávanie obchodných partnerov; G2 podporuje vyhľadávanie bez diakritiky.",
+    "fields": {
+      "searchTerm": "Text na vyhľadanie partnerov; súvisiaca G2 procedúra BusinessPartner_Find používa FindValue."
+    },
+    "messageFields": {
+      "SearchBusinessPartnersResponse.businessPartners": "Obchodní partneri vyhovujúci textovému kritériu.",
+      "BusinessPartner.name": "Názov obchodného partnera.",
+      "BusinessPartner.ico": "IČO partnera; v G1 je označené IdentificationNumber.",
+      "BusinessPartner.dic": "DIČ partnera; v G1 je označené IdentificationNumberTax.",
+      "BusinessPartner.icDph": "IČ DPH partnera; v G1 je označené IdentificationNumberVat.",
+      "BusinessPartner.email": "E-mail obchodného partnera.",
+      "BusinessPartner.phone": "Hlavné telefónne číslo partnera; backend používa PhoneNumber.",
+      "BusinessPartner.website": "Internetová stránka partnera; backend používa WebPage.",
+      "BusinessPartner.contactPerson": "Kontaktná osoba partnera; v G1 ide o Contact.",
+      "BusinessPartner.address": "Fakturačná adresa partnera; G1 ju vracia ako samostatný adresný objekt."
+    },
+    "notes": [
+      "BusinessPartner_Find je kontextová G2 procedúra, nie dôkaz smerovania SearchBusinessPartners. Zdroj nedokladá ekvivalenciu pageNumber ani pageSize s jej argumentmi.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_Find|BusinessPartnerFindArg.FindValue",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_Find.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_Find(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Name.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberTax.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberTax",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberVat.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Email.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_PhoneNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_WebPage.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.WebPage",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Contact.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Contact",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Address.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Address"
+    ]
+  },
+  {
+    "rpc": "GetBusinessPartner",
+    "description": "Načíta obchodného partnera; backend rozlišuje GUID a interné číslo záznamu.",
+    "fields": {},
+    "messageFields": {
+      "GetBusinessPartnerResponse.businessPartner": "Údaje obchodného partnera; zdroj G2 opisuje hlavičku, kontakty a prevádzky.",
+      "BusinessPartner.name": "Názov obchodného partnera.",
+      "BusinessPartner.ico": "IČO partnera; v G1 je označené IdentificationNumber.",
+      "BusinessPartner.dic": "DIČ partnera; v G1 je označené IdentificationNumberTax.",
+      "BusinessPartner.icDph": "IČ DPH partnera; v G1 je označené IdentificationNumberVat.",
+      "BusinessPartner.email": "E-mail obchodného partnera.",
+      "BusinessPartner.phone": "Hlavné telefónne číslo partnera; backend používa PhoneNumber.",
+      "BusinessPartner.website": "Internetová stránka partnera; backend používa WebPage.",
+      "BusinessPartner.contactPerson": "Kontaktná osoba partnera; v G1 ide o Contact.",
+      "BusinessPartner.address": "Fakturačná adresa partnera; G1 ju vracia ako samostatný adresný objekt."
+    },
+    "notes": [
+      "G2 identifikuje partnera cez RecordGuid alebo IDNumBusinessPartner; význam a prevod bpId či identificationNumber v RPC nie je doložený.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_Get",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_Get.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_Get(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerGetArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Name.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberTax.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberTax",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberVat.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Email.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_PhoneNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_WebPage.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.WebPage",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Contact.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Contact",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Address.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Address"
+    ]
+  },
+  {
+    "rpc": "FindBusinessPartners",
+    "description": "Vyhľadá obchodných partnerov podľa zvoleného kritéria.",
+    "fields": {
+      "findValue": "Hodnota vyhľadávacieho kritéria partnera.",
+      "findMethod": "Iba G2: 0=IDNum, 1=IČO, 2=čiarový kód, 8=názov obsahuje slová oddelené medzerou, 9=presný názov, 20=GUID.",
+      "getBranches": "V G2 TRUE vracia aj prevádzky obchodného partnera.",
+      "getFileRepositoryBinaryDataMode": "Iba partnerský G2 režim: 0=bez binárnych údajov, 1=všetky, 2=vybrané prílohy, 32=náhľady spravidla 64×64 px.",
+      "getFileRepositoryBinaryDataFilterIDNums": "G2 výber príloh podľa IDNum sa používa s režimom Filter (2); RPC má iba jedno číslo."
+    },
+    "messageFields": {
+      "BusinessPartner.name": "Názov obchodného partnera.",
+      "BusinessPartner.ico": "IČO partnera; v G1 je označené IdentificationNumber.",
+      "BusinessPartner.dic": "DIČ partnera; v G1 je označené IdentificationNumberTax.",
+      "BusinessPartner.icDph": "IČ DPH partnera; v G1 je označené IdentificationNumberVat.",
+      "BusinessPartner.email": "E-mail obchodného partnera.",
+      "BusinessPartner.phone": "Hlavné telefónne číslo partnera; backend používa PhoneNumber.",
+      "BusinessPartner.website": "Internetová stránka partnera; backend používa WebPage.",
+      "BusinessPartner.contactPerson": "Kontaktná osoba partnera; v G1 ide o Contact.",
+      "BusinessPartner.address": "Fakturačná adresa partnera; G1 ju vracia ako samostatný adresný objekt.",
+      "FindMethod.value": "Iba G2: 0=IDNum, 1=IČO, 2=čiarový kód, 8=názov obsahuje slová oddelené medzerou, 9=presný názov, 20=GUID."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "RPC findMethod je vnorená správa a filter príloh je skalár; G2 enum a zoznam identifikátorov nemajú rovnaký dátový tvar.",
+      "Číselné režimy sú backendový kontext G2, nie potvrdené univerzálne hodnoty gateway."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_Find|BusinessPartnerFindArg.FindValue;BusinessPartnerFindArg.FindMethod;BusinessPartnerFindArg.GetBranches;BusinessPartnerFindArg.GetFileRepositoryBinaryDataMode;BusinessPartnerFindArg.GetFileRepositoryBinaryDataFilterIDNums",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_Find.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_Find(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Name.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberTax.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberTax",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberVat.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Email.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_PhoneNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_WebPage.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.WebPage",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Contact.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Contact",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Address.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerFindArg_FindValue.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg.FindValue",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerFindArg_FindMethod.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg.FindMethod",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerFindArg_enm_BusinessPartnerFindMethod.htm#T:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg.enm_BusinessPartnerFindMethod",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerFindArg_GetBranches.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg.GetBranches",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerFindArg_GetFileRepositoryBinaryDataMode.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg.GetFileRepositoryBinaryDataMode",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerGetArg_enm_GetFileRepositoryBinaryDataMode.htm#T:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerGetArg.enm_GetFileRepositoryBinaryDataMode",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerFindArg_GetFileRepositoryBinaryDataFilterIDNums.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerFindArg.GetFileRepositoryBinaryDataFilterIDNums"
+    ]
+  },
+  {
+    "rpc": "ListBusinessPartners",
+    "description": "Načíta filtrovaný zoznam obchodných partnerov.",
+    "fields": {
+      "filter": "Iba G2 LoadSettingsArg: bez filtrov sa načítajú všetky záznamy; formát RPC textového filtra nie je doložený.",
+      "page": "Iba G2 LoadSettingsArg: prvá stránka má index 0; základ číslovania RPC nie je doložený.",
+      "pageSize": "0 vráti všetky načítané záznamy a veľká odpoveď môže prekročiť timeout (iba zdroj G2 LoadSettingsArg, nie overený limit RPC).",
+      "sortBy": "G2 triedenie používa čísla databázových stĺpcov; prevod RPC názvu a smeru triedenia nie je doložený.",
+      "sortOrderAscending": "G2 triedenie používa čísla databázových stĺpcov; prevod RPC názvu a smeru triedenia nie je doložený."
+    },
+    "messageFields": {
+      "BusinessPartner.name": "Názov obchodného partnera.",
+      "BusinessPartner.ico": "IČO partnera; v G1 je označené IdentificationNumber.",
+      "BusinessPartner.dic": "DIČ partnera; v G1 je označené IdentificationNumberTax.",
+      "BusinessPartner.icDph": "IČ DPH partnera; v G1 je označené IdentificationNumberVat.",
+      "BusinessPartner.email": "E-mail obchodného partnera.",
+      "BusinessPartner.phone": "Hlavné telefónne číslo partnera; backend používa PhoneNumber.",
+      "BusinessPartner.website": "Internetová stránka partnera; backend používa WebPage.",
+      "BusinessPartner.contactPerson": "Kontaktná osoba partnera; v G1 ide o Contact.",
+      "BusinessPartner.address": "Fakturačná adresa partnera; G1 ju vracia ako samostatný adresný objekt."
+    },
+    "notes": [
+      "G2 BusinessPartnerListArg.LoadSettings je v dodanej schéme reťazec; formát RPC filter ani ekvivalencia stránkovania z toho nevyplýva.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartners_List|BusinessPartnerListArg.LoadSettings",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartners_List.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartners_List(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerListArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Name.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberTax.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberTax",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberVat.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Email.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_PhoneNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_WebPage.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.WebPage",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Contact.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Contact",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Address.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_PageIndex.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.PageIndex",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_PageSize.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.PageSize",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_Filters.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.Filters",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerListArg_LoadSettings.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerListArg.LoadSettings",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_Sort.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.Sort"
+    ]
+  },
+  {
+    "rpc": "GetBusinessPartnerListSettings",
+    "description": "Načíta databázové a špeciálne filtre evidencie obchodných partnerov.",
+    "fields": {},
+    "messageFields": {
+      "GetBusinessPartnerListSettingsResponse.columns": "V G2 dostupné databázové polia partnerskej evidencie, používané ako filtre.",
+      "GetBusinessPartnerListSettingsResponse.specialFilters": "V G2 virtuálne databázové polia pre špeciálny výber záznamov."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartners_ListSettings",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartners_ListSettings.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartners_ListSettings",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_AvailableBookSettings_Columns.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.AvailableBookSettings.Columns",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_AvailableBookSettings_SpecialFilters.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.AvailableBookSettings.SpecialFilters"
+    ]
+  },
+  {
+    "rpc": "ListBusinessPartnerGroups",
+    "description": "Načíta skupiny obchodných partnerov.",
+    "fields": {},
+    "messageFields": {
+      "ListBusinessPartnerGroupsResponse.businessPartnerGroups": "Skupiny na kategorizáciu partnerov podľa typu, obratu alebo iných kritérií.",
+      "BusinessPartnerGroup.name": "Názov skupiny; backend G2 uvádza najviac 50 znakov."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Limit názvu platí podľa partnerského DTO G2; nemožno ho preniesť na iné názvy ani na ostatné polia skupiny."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartnerGroups_List",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartnerGroups_List.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartnerGroups_List",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerGroup_Name.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerGroup.Name"
+    ]
+  },
+  {
+    "rpc": "GetBusinessPartnerCreditLimit",
+    "description": "Zistí čerpanie kreditného limitu; backend posudzuje pohľadávky po splatnosti a skladové výdajky.",
+    "fields": {
+      "identificationNumber": "IČO odberateľa, nie jeho interné IDNum."
+    },
+    "messageFields": {
+      "GetBusinessPartnerCreditLimitResponse.turnoverInfo": "Informácie o obrate partnera.",
+      "GetBusinessPartnerCreditLimitResponse.isExceeded": "Príznak prekročenia povoleného kreditného limitu.",
+      "GetBusinessPartnerCreditLimitResponse.allowedValue": "Suma, za ktorú možno ešte nakúpiť; G2 pri posudzovaní zohľadňuje aj nové položky aktuálneho dokladu.",
+      "GetBusinessPartnerCreditLimitResponse.configuredValue": "V G2 nastavená výška kreditného limitu odberateľa; backend ju nazýva BusinessPartnerCreditLimitValue.",
+      "GetBusinessPartnerCreditLimitResponse.businessPartnerIdentificationNumber": "IČO partnera, pre ktorého boli vypočítané hodnoty.",
+      "GetBusinessPartnerCreditLimitResponse.businessPartnerName": "Názov partnera evidovaný v OBERON-e."
+    },
+    "notes": [
+      "Zdroj G2 neuvádza schému finančných položiek odpovede; konkrétny výpočet limitu sa z neho nedá overiť.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Výpočet G2 rozlišuje neuhradenú časť čiastočne zaplatenej faktúry od celej sumy faktúry a zahŕňa nevysporiadané výdajky. RPC turnoverInfo a overdueInfo sú zoznamy textov; ich formát ani skladba nie sú doložené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_CreditLimitInfo|BusinessPartnerCreditLimitArg.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_CreditLimitInfo.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_CreditLimitInfo(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimitArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimitArg_IdentificationNumber.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimitArg.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_IsExceeded.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.IsExceeded",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_AllowedValue.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.AllowedValue",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_BusinessPartnerCreditLimitValue.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.BusinessPartnerCreditLimitValue",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_BusinessPartnerIdentificationNumber.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.BusinessPartnerIdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_BusinessPartnerName.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.BusinessPartnerName",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_InvoiceIssued_ExpirationDays.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.InvoiceIssued_ExpirationDays",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_Turnover_InvoiceIssued_ExpirationPaid.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.Turnover_InvoiceIssued_ExpirationPaid",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_Turnover_InvoiceIssued_ExpirationUnpaidTotal.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.Turnover_InvoiceIssued_ExpirationUnpaidTotal",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_Turnover_InvoiceIssued_Expiration_Total.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.Turnover_InvoiceIssued_Expiration_Total",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_Turnover_InvoiceIssued_Total.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.Turnover_InvoiceIssued_Total",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_Turnover_InvoiceIssued_Unpaid.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.Turnover_InvoiceIssued_Unpaid",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerCreditLimit_Turnover_StockReleaseNotes.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerCreditLimit.Turnover_StockReleaseNotes"
+    ]
+  },
+  {
+    "rpc": "AddBusinessPartner",
+    "description": "Vytvorí obchodného partnera; backend môže vracať viac druhov identifikátora záznamu.",
+    "fields": {
+      "businessPartner": "Údaje nového partnera: názov, identifikácia a adresa."
+    },
+    "messageFields": {
+      "AddBusinessPartnerResponse.recordInfo": "Informácie o vytvorenom zázname; zdroj opisuje aj pridelený GUID.",
+      "BusinessPartner.name": "Názov obchodného partnera.",
+      "BusinessPartner.ico": "IČO partnera; v G1 je označené IdentificationNumber.",
+      "BusinessPartner.dic": "DIČ partnera; v G1 je označené IdentificationNumberTax.",
+      "BusinessPartner.icDph": "IČ DPH partnera; v G1 je označené IdentificationNumberVat.",
+      "BusinessPartner.email": "E-mail obchodného partnera.",
+      "BusinessPartner.phone": "Hlavné telefónne číslo partnera; backend používa PhoneNumber.",
+      "BusinessPartner.website": "Internetová stránka partnera; backend používa WebPage.",
+      "BusinessPartner.contactPerson": "Kontaktná osoba partnera; v G1 ide o Contact.",
+      "BusinessPartner.address": "Fakturačná adresa partnera; G1 ju vracia ako samostatný adresný objekt.",
+      "RecordBaseInfo.guid": "GUID nového záznamu, ak ho evidencia podporuje; nie IDNum.",
+      "RecordBaseInfo.idNum": "Interný jednoznačný identifikátor nového záznamu; nie GUID.",
+      "RecordBaseInfo.info": "Doplňujúce informácie k novovytvorenému záznamu.",
+      "RecordBaseInfo.value": "Spravidla číslo nového záznamu, nie jeho interný identifikátor."
+    },
+    "notes": [
+      "RPC businessPartner je typovaná správa, ale dodaná G2 schéma BusinessPartnerAddArg.BusinessPartner je reťazec.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_Add|BusinessPartnerAddArg.BusinessPartner",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_Add.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_Add(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerAddArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Name.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberTax.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberTax",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_IdentificationNumberVat.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Email.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_PhoneNumber.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_WebPage.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.WebPage",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Contact.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Contact",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_BusinessPartner_Address.htm#F:Exa.OBERON.Services.OBERON.BusinessPartner.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_GUID.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.GUID",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_IDNum.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_Info.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.Info",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_Value.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.Value"
+    ]
+  },
+  {
+    "rpc": "UpdateBusinessPartner",
+    "description": "Upraví hlavičkové údaje partnera; G2 upravuje prevádzky samostatne.",
+    "fields": {
+      "header": "Aktualizované údaje partnera."
+    },
+    "messageFields": {
+      "BusinessPartnerHeader.recordGuid": "GUID obchodného partnera; nie interné číslo IDNum.",
+      "BusinessPartnerHeader.identificationNumber": "IČO obchodného partnera.",
+      "BusinessPartnerHeader.identificationNumberTax": "DIČ obchodného partnera.",
+      "BusinessPartnerHeader.identificationNumberVat": "IČ DPH obchodného partnera.",
+      "UpdateBusinessPartnerResponse.recordInfo": "Informácie o aktualizovanom zázname.",
+      "BusinessPartnerHeader.name": "Názov obchodného partnera.",
+      "BusinessPartnerHeader.email": "Hlavná e-mailová adresa partnera.",
+      "BusinessPartnerHeader.phone": "Hlavné kontaktné telefónne číslo; G2 používa PhoneNumber.",
+      "BusinessPartnerHeader.web": "Internetová stránka partnera; G2 používa WebPage.",
+      "BusinessPartnerHeader.contactPerson": "Kontaktná osoba; G2 používa Contact.",
+      "BusinessPartnerHeader.address": "Hlavná adresa sídla partnera; G2 ju uchováva ako adresný objekt.",
+      "RecordBaseInfo.guid": "GUID nového záznamu, ak ho evidencia podporuje; nie IDNum.",
+      "RecordBaseInfo.idNum": "Interný jednoznačný identifikátor nového záznamu; nie GUID.",
+      "RecordBaseInfo.info": "Doplňujúce informácie k novovytvorenému záznamu.",
+      "RecordBaseInfo.value": "Spravidla číslo nového záznamu, nie jeho interný identifikátor."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "G2 aktualizácia vracia RecordBaseInfo s identifikátorom aktualizovaného záznamu; jednotlivé vlastnosti typu sú však všeobecne opísané pre nový záznam."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_Update|BusinessPartnerHeader.RecordGuid;BusinessPartnerHeader.IdentificationNumber;BusinessPartnerHeader.IdentificationNumberTax;BusinessPartnerHeader.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_Update.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_Update(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_RecordGuid.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.RecordGuid",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_Name.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_IdentificationNumber.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_IdentificationNumberTax.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.IdentificationNumberTax",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_IdentificationNumberVat.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.IdentificationNumberVat",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_Email.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_PhoneNumber.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_WebPage.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.WebPage",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_Contact.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.Contact",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerHeader_Address.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerHeader.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_GUID.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.GUID",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_IDNum.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_Info.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.Info",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_RecordBaseInfo_Value.htm#P:Exa.OBERON.ServicesGen2.Base.RecordBaseInfo.Value"
+    ]
+  },
+  {
+    "rpc": "DeleteBusinessPartner",
+    "description": "Odstráni partnera z evidencie; podľa G2 údaje partnera na dokladoch zostanú zachované.",
+    "fields": {
+      "recordGuid": "GUID partnera určeného na odstránenie; nie IDNum ani IČO."
+    },
+    "messageFields": {},
+    "notes": [
+      "G2 obsahuje aj IDNumBusinessPartner; nie je to RPC identificationNumber a nejde o zameniteľné identifikátory.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Backendový IDNumBusinessPartner nie je RPC identificationNumber; spôsob kombinovania identifikátorov nie je doložený."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#BusinessPartner_Delete|BusinessPartnerDeleteArg.RecordGuid",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_BusinessPartner_Delete.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.BusinessPartner_Delete(Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerDeleteArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerDeleteArg_RecordGuid.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerDeleteArg.RecordGuid",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_BusinessPartners_BusinessPartnerDeleteArg_IDNumBusinessPartner.htm#P:Exa.OBERON.ServicesGen2.BusinessPartners.BusinessPartnerDeleteArg.IDNumBusinessPartner"
+    ]
+  },
+  {
+    "rpc": "GetStockCardFind",
+    "description": "Vyhľadá skladové karty podľa zvoleného kritéria. Zdroj G2 opisuje aj fulltext ignorujúci diakritiku.",
+    "fields": {
+      "findMethod": "Zdroj G2 FindMethod: 0=Identificator (IDNum), 1=Number (číslo karty), 2=BarCode, 3=CashRegisterCode, 4=PLU, 8=NameContains (názov obsahuje), 9=Name (presný názov), 99=FullText.",
+      "findValue": "Hodnota zvoleného kritéria; RPC prijíma jeden reťazec, zdroj G2 FindValues prijíma pole hodnôt. Iba G2: pre BarCode môže byť výsledkov viac; rovnaký čiarový kód môže mať viac kariet."
+    },
+    "messageFields": {
+      "GetStockCardFindResponse.stockCards": "Karty vyhovujúce vyhľadávaciemu kritériu.",
+      "StockCard.name": "Názov skladovej položky.",
+      "StockCard.unit": "Základná merná jednotka karty, nie alternatívna jednotka príjmu či výdaja."
+    },
+    "notes": [
+      "G2 používa obal stockCardsFindArg a FindValues ako pole; prevod skalárneho findValue nie je doložený.",
+      "Číselné režimy a správanie fulltextu sú uvedené pre G2 procedúru, nie overené ako invarianty RPC.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Existujúce číselné režimy zostávajú iba G2. G2 FindValues je pole; nie je potvrdený prevod jedného RPC findValue ani stránkovania."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#Stock_StockCards_Find|stockCardsFindArg.FindMethod;stockCardsFindArg.FindValues",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_StockCards_Find.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_StockCards_Find(Exa.OBERON.ServicesGen2.Stock.StockCards.StockCardsFindArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Name.htm#P:Exa.OBERON.Services.OBERON.StockCard.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Unit.htm#P:Exa.OBERON.Services.OBERON.StockCard.Unit",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCards_StockCardsFindArg_FindValues.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCards.StockCardsFindArg.FindValues",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_StockCards_StockCardsFindArg_enm_StockCardsFindMethod.htm#T:Exa.OBERON.ServicesGen2.Stock.StockCards.StockCardsFindArg.enm_StockCardsFindMethod",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCards_StockCardsFindArg_FindMethod.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCards.StockCardsFindArg.FindMethod"
+    ]
+  },
+  {
+    "rpc": "GetStockCards",
+    "description": "Načíta skladové karty podľa výberových filtrov.",
+    "fields": {
+      "page": "Iba G2 LoadSettingsArg: prvá stránka má index 0; základ číslovania RPC nie je doložený.",
+      "pageSize": "0 vráti všetky načítané záznamy a veľká odpoveď môže prekročiť timeout (iba zdroj G2 LoadSettingsArg, nie overený limit RPC).",
+      "filter": "Iba G2 LoadSettingsArg: bez filtrov sa načítajú všetky záznamy; formát RPC textového filtra nie je doložený."
+    },
+    "messageFields": {
+      "GetStockCardsResponse.stockCards": "Základné údaje skladových kariet vo výslednom zozname.",
+      "StockCard.name": "Názov skladovej položky.",
+      "StockCard.unit": "Základná merná jednotka karty, nie alternatívna jednotka príjmu či výdaja."
+    },
+    "notes": [
+      "Zdroj G2 používa obal stockCardsListArg a LoadSettings; prevod stránkovania a filtrov do RPC nie je doložený.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#Stock_StockCards_List|stockCardsListArg.LoadSettings.PageIndex;stockCardsListArg.LoadSettings.PageSize;stockCardsListArg.LoadSettings.Filters",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_StockCards_List.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_StockCards_List(Exa.OBERON.ServicesGen2.Stock.StockCards.StockCardsListArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Name.htm#P:Exa.OBERON.Services.OBERON.StockCard.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Unit.htm#P:Exa.OBERON.Services.OBERON.StockCard.Unit",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_PageIndex.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.PageIndex",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_PageSize.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.PageSize",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_Filters.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.Filters"
+    ]
+  },
+  {
+    "rpc": "GetStockCard",
+    "description": "Načíta skladovú kartu; backendové IDNum nie je GUID.",
+    "fields": {},
+    "messageFields": {
+      "GetStockCardResponse.stockCard": "Detail vybranej skladovej karty.",
+      "StockCard.name": "Názov skladovej položky.",
+      "StockCard.unit": "Základná merná jednotka karty, nie alternatívna jednotka príjmu či výdaja."
+    },
+    "notes": [
+      "RPC stockCardGuid je reťazcový GUID; G2 vyhľadáva cez číselný IDNumStockCard a IDNumStock. Ich prevod ani ekvivalencia nie sú doložené.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "G2 detail vyberá kartu internými číslami karty a skladu; prevod stockCardGuid na tieto čísla nie je doložený."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#Stock_StockCard_Get|stockCardGetArg.IDNumStockCard;stockCardGetArg.IDNumStock",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_StockCard_Get.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_StockCard_Get(Exa.OBERON.ServicesGen2.Stock.StockCards.StockCardGetArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Name.htm#P:Exa.OBERON.Services.OBERON.StockCard.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Unit.htm#P:Exa.OBERON.Services.OBERON.StockCard.Unit"
+    ]
+  },
+  {
+    "rpc": "GetStockCardInventoryFind",
+    "description": "Vyhľadá skladové karty v inventúrnom súpise.",
+    "fields": {
+      "findMethod": "Iba G2 inventúrne hľadanie: 0=identifikátor, 1=číslo karty, 2=čiarový kód, 3=kód pokladnice, 4=PLU, 9=názov alebo časť, 99=fulltext.",
+      "findValue": "G2 StockCardInventoryFindArg používa jednu textovú hodnotu hľadania.",
+      "getVariants": "V G2 TRUE doplní údaje variantov skladovej karty."
+    },
+    "messageFields": {
+      "GetStockCardInventoryFindResponse.inventories": "Inventúrne položky vyhovujúce podmienke.",
+      "StockCardInventory.stockCardName": "Názov skladovej karty v inventúrnom súpise.",
+      "StockCardInventory.warehouseName": "Názov skladu, v ktorom je inventúrna karta zaradená."
+    },
+    "notes": [
+      "Pre inventúru nie je doložené použitie číselných režimov Stock_StockCards_Find ani význam RPC getVariants.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Inventúrny režim 9 hľadá aj časť názvu; nie je zhodný s režimom 9 bežného hľadania skladových kariet.",
+      "Táto verzia príručky G2 uvádza FindValue ako jeden reťazec; staršia dodaná schéma uvádzala FindValues. Rozpor verzií nie je dôkaz mapovania gateway.",
+      "Backend odlišuje množstvo k začiatku inventúry, aktuálne evidované a fyzicky spočítané množstvo; význam jediného RPC quantity nie je určený."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#Stock_StockCardsInventory_Find|StockCardsInventoryFindArg.FindMethod;StockCardsInventoryFindArg.FindValues",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_StockCardsInventory_Find.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_StockCardsInventory_Find(Exa.OBERON.ServicesGen2.Stock.StockCardsInventory.StockCardInventoryFindArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCardsInventory_StockCardInventoryFindArg_FindMethod.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCardsInventory.StockCardInventoryFindArg.FindMethod",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_StockCardsInventory_StockCardInventoryFindArg_enm_StockCardsInventoryFindMethod.htm#T:Exa.OBERON.ServicesGen2.Stock.StockCardsInventory.StockCardInventoryFindArg.enm_StockCardsInventoryFindMethod",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCardsInventory_StockCardInventoryFindArg_FindValue.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCardsInventory.StockCardInventoryFindArg.FindValue",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCardsInventory_StockCardInventoryFindArg_GetVariants.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCardsInventory.StockCardInventoryFindArg.GetVariants",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_Name.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_StockName.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.StockName",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_AmountEvidence.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.AmountEvidence",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_AmountEvidenceActual.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.AmountEvidenceActual",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_AmountPhysical.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.AmountPhysical"
+    ]
+  },
+  {
+    "rpc": "GetStockCardInventory",
+    "description": "Načíta inventúrne položky; backend vyžaduje začatú inventúru vybraného skladu.",
+    "fields": {
+      "page": "Iba G2 LoadSettingsArg: prvá stránka má index 0; základ číslovania RPC nie je doložený.",
+      "pageSize": "Iba G2 LoadSettingsArg: 0 vráti všetky načítané záznamy; veľká odpoveď môže prekročiť časový limit.",
+      "filter": "Iba G2 LoadSettingsArg: bez filtrov sa načítajú všetky záznamy; formát RPC textového filtra nie je doložený."
+    },
+    "messageFields": {
+      "GetStockCardInventoryResponse.inventories": "Inventúrne položky skladu s údajmi o evidovanom stave.",
+      "StockCardInventory.stockCardName": "Názov skladovej karty v inventúrnom súpise.",
+      "StockCardInventory.warehouseName": "Názov skladu, v ktorom je inventúrna karta zaradená."
+    },
+    "notes": [
+      "Stránkovanie a nulová veľkosť stránky sú pravidlá zdrojového G2 LoadSettings, nie overené pravidlá RPC.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Backend odlišuje množstvo k začiatku inventúry, aktuálne evidované a fyzicky spočítané množstvo; význam jediného RPC quantity nie je určený."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#Stock_StockCardsInventory_List|LoadSettings.PageIndex;LoadSettings.PageSize;LoadSettings.Filters",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_StockCardsInventory_List.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_StockCardsInventory_List(Exa.OBERON.ServicesGen2.Stock.StockCardsInventory.StockCardInventoryListArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_Name.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_StockName.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.StockName",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_PageIndex.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.PageIndex",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_PageSize.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.PageSize",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_BookSettings_LoadSettingsArg_Filters.htm#P:Exa.OBERON.ServicesGen2.Common.BookSettings.LoadSettingsArg.Filters",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_AmountEvidence.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.AmountEvidence",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_AmountEvidenceActual.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.AmountEvidenceActual",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_StockCardInventoryItem_AmountPhysical.htm#F:Exa.OBERON.Services.OBERON.StockCardInventoryItem.AmountPhysical"
+    ]
+  },
+  {
+    "rpc": "GetStockBalance",
+    "description": "Načíta stav zásob; backendový súhrn skladu nie je doložený ako zostatok jednej karty.",
+    "fields": {},
+    "messageFields": {
+      "GetStockBalanceResponse.balances": "Údaje o aktuálnom stave zásob."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetStock_StocksBalance",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetStock_StocksBalance.htm#M:Exa.OBERON.Services.IOBERONService.GetStock_StocksBalance"
+    ]
+  },
+  {
+    "rpc": "GetStockCardAttributes",
+    "description": "Načíta atribúty skladových kariet používané napríklad pri variantoch.",
+    "fields": {},
+    "messageFields": {
+      "GetStockCardAttributesResponse.attributes": "Atribúty skladových kariet, napríklad pre varianty.",
+      "StockCardAttribute.attributeName": "Názov atribútu; backend používa StockCardAttribute.Name.",
+      "StockCardAttribute.attributeValue": "Hodnota atribútu prevedená podľa dátového typu na text; nie vždy voľný text."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetStock_StockCardAttributes",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetStock_StockCardAttributes.htm#M:Exa.OBERON.Services.IOBERONService.GetStock_StockCardAttributes(Exa.OBERON.Services.OBERON.StockCardAttributeListArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCardAttribute_Name.htm#P:Exa.OBERON.Services.OBERON.StockCardAttribute.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCardAttribute_Value.htm#P:Exa.OBERON.Services.OBERON.StockCardAttribute.Value",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCardAttribute_ValueType.htm#P:Exa.OBERON.Services.OBERON.StockCardAttribute.ValueType"
+    ]
+  },
+  {
+    "rpc": "GetStockCardCustomerPrices",
+    "description": "Načíta zmluvné ceny skladových kariet pre obchodných partnerov.",
+    "fields": {},
+    "messageFields": {
+      "GetStockCardCustomerPricesResponse.prices": "Zmluvné ceny skladovej karty."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetStock_StockCardCustomerPrices",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetStock_StockCardCustomerPrices.htm#M:Exa.OBERON.Services.IOBERONService.GetStock_StockCardCustomerPrices(System.Int64,System.Int64)"
+    ]
+  },
+  {
+    "rpc": "GetStockCardsTreeCategory",
+    "description": "Načíta kategórie skladových kariet; v G2 môže karta patriť do viacerých kategórií.",
+    "fields": {},
+    "messageFields": {
+      "GetStockCardsTreeCategoryResponse.nodes": "Kategórie skladových kariet.",
+      "StockCardTreeNode.name": "Názov kategórie skladových kariet."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "G2 kategórie používajú IDNum a IDNum_Parent; nejde o dôkaz GUID uzla alebo nadradenej kategórie ani významu level."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetStock_StockCards_TreeCategory",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_StockCard_TreeCategories_List.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_StockCard_TreeCategories_List(Exa.OBERON.ServicesGen2.Stock.StockCommon.TreeCategories.StockCardsTreeCategoriesListArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCommon_TreeCategories_TreeCategory_Name.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCommon.TreeCategories.TreeCategory.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCommon_TreeCategories_TreeCategory_IDNum.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCommon.TreeCategories.TreeCategory.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCommon_TreeCategories_TreeCategory_IDNum_Parent.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCommon.TreeCategories.TreeCategory.IDNum_Parent"
+    ]
+  },
+  {
+    "rpc": "GetMovementDocumentTypes",
+    "description": "Načíta druhy skladových pohybov používané vo výdajkách, príjemkách a reportoch.",
+    "fields": {},
+    "messageFields": {
+      "GetMovementDocumentTypesResponse.types": "Typy pohybov používané v skladových dokladoch a reportoch.",
+      "MovementDocumentType.name": "Názov druhu skladového pohybu."
+    },
+    "notes": [
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené."
+    ],
+    "sources": [
+      "oberon-api-docs-g2/code/openapi.json#Stock_MovementDocumentTypes_List",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_Stock_MovementDocumentTypes_List.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.Stock_MovementDocumentTypes_List(Exa.OBERON.ServicesGen2.Stock.StockCommon.MovementDocumentTypes.MovementDocumentTypesArgs)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Stock_StockCommon_MovementDocumentTypes_MovementDocumentType_Name.htm#F:Exa.OBERON.ServicesGen2.Stock.StockCommon.MovementDocumentTypes.MovementDocumentType.Name"
+    ]
+  },
+  {
+    "rpc": "SetStockCard",
+    "description": "Zapíše skladovú kartu; G1 dokumentuje vytvorenie novej karty vo vybranom sklade.",
+    "fields": {
+      "warehouseName": "V G1 názov skladu, do ktorého sa nová karta pridáva.",
+      "idNum": "Backendové IDNum jednoznačne určuje kartu v celej databáze, nie iba v jednom sklade.",
+      "name": "Názov skladovej položky.",
+      "barCode": "V G1 môže obsahovať viac čiarových kódov oddelených zvislou čiarou |.",
+      "unit": "Základná merná jednotka skladovej karty.",
+      "location": "Spravidla fyzické umiestnenie položky v sklade.",
+      "catalog": "Katalógové číslo; príručka G1 označuje toto pole ako zastarané a neodporúča ho používať."
+    },
+    "messageFields": {},
+    "notes": [
+      "Zdroj G1 opisuje vytvorenie novej karty a návrat IDNum. Nepotvrdzuje aktualizáciu cez nenulové RPC idNum ani tvar RPC odpovede.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "G1 opisuje vytvorenie karty, nie aktualizáciu cez nenulové idNum. Existujúci komentár proto nie je ďalší dôkaz z backendovej príručky.",
+      "G1 má štyri cenové hladiny s DPH aj bez DPH. Výber hladiny pre priceWithVat a priceWithoutVat nie je doložený; neprenáša sa automaticky cena 1."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#SetStock_StockCard",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_SetStock_StockCard.htm#M:Exa.OBERON.Services.IOBERONService.SetStock_StockCard(Exa.OBERON.Services.OBERON.SetStock_StockCardArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_SetStock_StockCardArg_StockName.htm#F:Exa.OBERON.Services.OBERON.SetStock_StockCardArg.StockName",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_IDNum.htm#P:Exa.OBERON.Services.OBERON.StockCard.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Name.htm#P:Exa.OBERON.Services.OBERON.StockCard.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_BarCode.htm#P:Exa.OBERON.Services.OBERON.StockCard.BarCode",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Unit.htm#P:Exa.OBERON.Services.OBERON.StockCard.Unit",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Location.htm#P:Exa.OBERON.Services.OBERON.StockCard.Location",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_Catalog.htm#P:Exa.OBERON.Services.OBERON.StockCard.Catalog",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithVAT1.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithVAT1",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithVAT2.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithVAT2",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithVAT3.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithVAT3",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithVAT4.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithVAT4",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithoutVAT1.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithoutVAT1",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithoutVAT2.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithoutVAT2",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithoutVAT3.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithoutVAT3",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_StockCard_PriceWithoutVAT4.htm#P:Exa.OBERON.Services.OBERON.StockCard.PriceWithoutVAT4"
+    ]
+  },
+  {
+    "rpc": "DeleteStockCard",
+    "description": "Odstráni skladovú kartu; G1 zakazuje v reálnom sklade mazanie karty so skladovými pohybmi.",
+    "fields": {
+      "warehouseName": "V G1 názov skladu, v ktorom sa karty odstraňujú.",
+      "idNum": "V G1 interné číslo karty na odstránenie; backend prijíma zoznam čísel, RPC iba jedno."
+    },
+    "messageFields": {},
+    "notes": [
+      "G1 opisuje odstránenie jednej alebo viacerých kariet; RPC má jedno idNum.",
+      "Pri reálnych, nie externých skladoch G1 uvádza rovnaké obmedzenia mazania ako v module Sklad, bez úplného zoznamu.",
+      "Významy backendových polí sú dokumentačný kontext; smerovanie RPC ani prevod odlišných dátových tvarov nie sú týmto overené.",
+      "Pravidlá mazania sú doložené pre G1: reálne sklady majú obmedzenia, externé sklady bez pohybov umožňujú jednoduchšie mazanie."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#DeleteStock_StockCard",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_DeleteStock_StockCard.htm#M:Exa.OBERON.Services.IOBERONService.DeleteStock_StockCard(Exa.OBERON.Services.OBERON.DeleteStock_StockCardArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_DeleteStock_StockCardArg_StockName.htm#F:Exa.OBERON.Services.OBERON.DeleteStock_StockCardArg.StockName",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_DeleteStock_StockCardArg_StockCardIDNum.htm#F:Exa.OBERON.Services.OBERON.DeleteStock_StockCardArg.StockCardIDNum"
+    ]
+  },
+  {
+    "rpc": "GetCompanyInfo",
+    "description": "Načíta údaje o účtovnej jednotke.",
+    "fields": {},
+    "messageFields": {
+      "GetCompanyInfoResponse.company": "Kontext backendu: údaje o účtovnej jednotke.",
+      "CompanyInfo.name": "Názov účtovnej jednotky.",
+      "CompanyInfo.identificationNumber": "IČO účtovnej jednotky.",
+      "CompanyInfo.identificationNumberTax": "DIČ účtovnej jednotky.",
+      "CompanyInfo.identificationNumberVat": "IČ DPH účtovnej jednotky.",
+      "CompanyInfo.city": "Obec v adrese účtovnej jednotky.",
+      "CompanyInfo.postalCode": "PSČ účtovnej jednotky.",
+      "CompanyInfo.country": "Krajina účtovnej jednotky.",
+      "CompanyInfo.email": "E-mail účtovnej jednotky.",
+      "CompanyInfo.phoneNumber": "Telefón účtovnej jednotky."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Významy premenovaných polí sú kontextové; prevod typovanej adresy na reťazec nie je potvrdený. IČ DPH podporuje jednoznačná dokumentácia Gen1.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetCompanyInfo",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetCompanyInfo.htm#M:Exa.OBERON.Services.IOBERONService.GetCompanyInfo",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyInfo_Name.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyInfo.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyInfo_IdentificationNumber.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyInfo.IdentificationNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyInfo_IdentificationNumber_TAX.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyInfo.IdentificationNumber_TAX",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERONCashRegister_CompanyInfo_IdentificationNumber_VAT.htm#P:Exa.OBERON.Services.OBERONCashRegister.CompanyInfo.IdentificationNumber_VAT",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyInfo_Address.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyInfo.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyAddressInfo_City.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyAddressInfo.City",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyAddressInfo_PostalCode.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyAddressInfo.PostalCode",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyAddressInfo_Country.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyAddressInfo.Country",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyInfo_Email.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyInfo.Email",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyInfo_PhoneNumber.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyInfo.PhoneNumber"
+    ]
+  },
+  {
+    "rpc": "GetCompanySettings",
+    "description": "Načíta základné nastavenia účtovnej jednotky; backend ich poskytuje ako typovaný objekt.",
+    "fields": {},
+    "messageFields": {
+      "GetCompanySettingsResponse.settings": "Základné nastavenia firmy."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Zdroj G1 neuvádza význam ani filter settingKey; nemožno sľúbiť výber jedného nastavenia.",
+      "Backend má konkrétne nastavenia vrátane predvolenej meny a sadzieb DPH; zoznam ľubovoľných dvojíc kľúč/hodnota nie je zdokumentovaný.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetCompanySettings",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetCompanySettings.htm#M:Exa.OBERON.Services.IOBERONService.GetCompanySettings"
+    ]
+  },
+  {
+    "rpc": "GetCompanyBranches",
+    "description": "Vráti zoznam prevádzok účtovnej jednotky.",
+    "fields": {},
+    "messageFields": {
+      "GetCompanyBranchesResponse.branches": "Kontext backendu: zoznam prevádzok.",
+      "CompanyBranch.name": "Názov prevádzky.",
+      "CompanyBranch.address": "Adresa prevádzky; formát gateway nie je doložený.",
+      "CompanyBranch.city": "Obec v adrese prevádzky.",
+      "CompanyBranch.postalCode": "PSČ v adrese prevádzky.",
+      "CompanyBranch.phoneNumber": "Telefón prevádzky.",
+      "CompanyBranch.email": "E-mail prevádzky."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Číslo prevádzky pre číslovanie dokladov nie je automaticky identifikátor id.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetCompanyBranches",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetCompanyBranches.htm#M:Exa.OBERON.Services.IOBERONService.GetCompanyBranches",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CompanyBranch_BranchName.htm#F:Exa.OBERON.Services.OBERON.CompanyBranch.BranchName",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CompanyBranch_Address.htm#F:Exa.OBERON.Services.OBERON.CompanyBranch.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyBranch_Address.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyBranch.Address",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyAddressInfo_City.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyAddressInfo.City",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/F_Exa_OBERON_ServicesGen2_Company_CompanyAddressInfo_PostalCode.htm#F:Exa.OBERON.ServicesGen2.Company.CompanyAddressInfo.PostalCode",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CompanyBranch_PhoneNo.htm#F:Exa.OBERON.Services.OBERON.CompanyBranch.PhoneNo",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CompanyBranch_Email.htm#F:Exa.OBERON.Services.OBERON.CompanyBranch.Email"
+    ]
+  },
+  {
+    "rpc": "GetCashRegistersBillsOpen",
+    "description": "Vráti otvorené účty, v reštaurácii účty stolov.",
+    "fields": {},
+    "messageFields": {
+      "GetCashRegistersBillsOpenResponse.bills": "Kontext backendu: zoznam otvorených účtov.",
+      "CashRegisterBill.billNumber": "Číslo otvoreného účtu; v reštaurácii môže byť číslom stola.",
+      "CashRegisterBill.billDate": "Dátum a čas otvoreného účtu; časové pásmo nie je doložené.",
+      "CashRegisterBill.totalAmount": "Celková cena otvoreného účtu s DPH; mena tu nie je doložená."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "GUID pokladnice ani status gateway nie sú doložené; číslo účtu nie je identifikátor pokladnice.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetStock_CashRegistersBillsOpen",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetStock_CashRegistersBillsOpen.htm#M:Exa.OBERON.Services.IOBERONService.GetStock_CashRegistersBillsOpen",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashregisterOBERON_BillsOpen_Number.htm#F:Exa.OBERON.Services.OBERON.CashregisterOBERON_BillsOpen.Number",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashregisterOBERON_BillsOpen_DateTime.htm#F:Exa.OBERON.Services.OBERON.CashregisterOBERON_BillsOpen.DateTime",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashregisterOBERON_BillsOpen_TotalPrice.htm#F:Exa.OBERON.Services.OBERON.CashregisterOBERON_BillsOpen.TotalPrice"
+    ]
+  },
+  {
+    "rpc": "GetCashRegistersTurnover",
+    "description": "Vráti obraty registračných pokladníc.",
+    "fields": {},
+    "messageFields": {
+      "GetCashRegistersTurnoverResponse.turnvers": "Kontext backendu: obraty registračných pokladníc; presný názov poľa gateway ostáva nezmenený.",
+      "CashRegisterTurnover.date": "Dátum obratu pokladnice.",
+      "CashRegisterTurnover.totalSales": "Kontext DTO: celková hodnota obratu, nie potvrdený čistý predaj gateway.",
+      "CashRegisterTurnover.transactionCount": "Kontext DTO: počet dokladov zahrnutých do obratu."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Pôvodná metóda nemá filtre GUID a dátumov. Celkový obrat a počet dokladov sú iba kontext pre totalSales a transactionCount.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetStock_CashRegistersTurnover",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetStock_CashRegistersTurnover.htm#M:Exa.OBERON.Services.IOBERONService.GetStock_CashRegistersTurnover",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashregisterOBERON_TurnoverPerDays_TurnoverDate.htm#F:Exa.OBERON.Services.OBERON.CashregisterOBERON_TurnoverPerDays.TurnoverDate",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashregisterOBERON_TurnoverPerDays_Total.htm#F:Exa.OBERON.Services.OBERON.CashregisterOBERON_TurnoverPerDays.Total",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashregisterOBERON_TurnoverPerDays_Bills.htm#F:Exa.OBERON.Services.OBERON.CashregisterOBERON_TurnoverPerDays.Bills"
+    ]
+  },
+  {
+    "rpc": "GetCashRegisterDailyBalanceHistory",
+    "description": "Vráti históriu denných uzávierok; nejde o doloženú históriu hotovostných zostatkov.",
+    "fields": {
+      "fromDate": "Kontext histórie uzávierok: začiatok obdobia; inkluzivita a pásmo nie sú doložené.",
+      "toDate": "Kontext histórie uzávierok: koniec obdobia; inkluzivita a pásmo nie sú doložené."
+    },
+    "messageFields": {
+      "GetCashRegisterDailyBalanceHistoryResponse.history": "Kontext backendu: história denných uzávierok.",
+      "DailyBalance.date": "Dátum dennej uzávierky.",
+      "DailyBalance.totalSales": "Kontext DTO: celkový obrat k danému dňu, nie potvrdený čistý predaj gateway."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Iba backendový režim chartType: Monthly = 0 (mesačné súčty), Daily = 1 (po dňoch). Gateway tento parameter neobsahuje; predvolený režim nemožno doplniť.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetCashRegister_DailyBalanceHistory",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetCashRegister_DailyBalanceHistory.htm#M:Exa.OBERON.Services.IOBERONService.GetCashRegister_DailyBalanceHistory(System.String,System.String,System.String,Exa.OBERON.Services.OBERON.enm_TurnoverHistoryType)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/T_Exa_OBERON_Services_OBERON_enm_TurnoverHistoryType.htm#T:Exa.OBERON.Services.OBERON.enm_TurnoverHistoryType",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashRegister_DailyBalanceHistoryItem_BalanceDate.htm#F:Exa.OBERON.Services.OBERON.CashRegister_DailyBalanceHistoryItem.BalanceDate",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_CashRegister_DailyBalanceHistoryItem_TurnoverValue.htm#F:Exa.OBERON.Services.OBERON.CashRegister_DailyBalanceHistoryItem.TurnoverValue"
+    ]
+  },
+  {
+    "rpc": "GetHotelRooms",
+    "description": "Vráti zoznam izieb ubytovacieho zariadenia.",
+    "fields": {},
+    "messageFields": {
+      "GetHotelRoomsResponse.rooms": "Kontext backendu: zoznam izieb.",
+      "HotelRoom.id": "Kontext DTO: identifikátor izby, nie rezervácie.",
+      "HotelRoom.roomNumber": "Číslo izby.",
+      "HotelRoom.roomType": "Kontext DTO: názov typu izby, nie jeho identifikátor."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Stav upratovania a stav drobných opráv sú rozdielne údaje. Jedna cena za noc ani všeobecný stav gateway nie sú doložené.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway.",
+      "Iba natívny hotelový kontext: číslo izby môže obsahovať alfanumerické znaky; nejde o číselný identifikátor ani potvrdenie prevodu do gateway.",
+      "Natívny typ izby určuje počet pevných lôžok, prístelkov a cenovú hladinu. To nepotvrdzuje jednu pevnú cenu za noc ani význam pricePerNight."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetHotel_Rooms",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetHotel_Rooms.htm#M:Exa.OBERON.Services.IOBERONService.GetHotel_Rooms",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Room_IDNum.htm#F:Exa.OBERON.Services.OBERON.Hotel_Room.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Room_Room_Number.htm#F:Exa.OBERON.Services.OBERON.Hotel_Room.Room_Number",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Room_Room_Type_Name.htm#F:Exa.OBERON.Services.OBERON.Hotel_Room.Room_Type_Name",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Rooms.Room.Room_Number",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#T:Exa.OBERON.Hotel.Rooms.RoomType",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Rooms.RoomType.PricesLevel_Name",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Rooms.Room.State_Clean",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Rooms.Room.State_SmallRepair"
+    ]
+  },
+  {
+    "rpc": "GetHotelGuests",
+    "description": "Kontext backendu: vráti hostí konkrétnej rezervácie, ubytovania alebo rezervácie služieb, nie automaticky všetkých aktuálne ubytovaných.",
+    "fields": {},
+    "messageFields": {
+      "GetHotelGuestsResponse.guests": "Kontext backendu: hostia konkrétnej rezervácie, ubytovania alebo rezervácie služby.",
+      "HotelGuest.id": "Kontext DTO: identifikátor hosťa, nie rezervácie ani izby.",
+      "HotelGuest.phoneNumber": "Telefón hosťa.",
+      "HotelGuest.email": "E-mail hosťa."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "G1 opisuje hostí konkrétnej rezervácie ubytovania, ubytovania alebo rezervácie služieb; syntax ani rozsah RPC filter nie sú doložené.",
+      "Backend používa GUID rodičovského záznamu a typ evidencie; nejde o GUID hosťa ani izby. Číslo dokladu totožnosti nie je automaticky číslo pasu.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway.",
+      "Natívny archív hostí eviduje aj historicky ubytované osoby; nie je dôkazom, že RPC vracia archív alebo všetkých aktuálne ubytovaných.",
+      "Evidencia hosťa je oddelená od väzby hosťa na konkrétnu rezerváciu alebo ubytovanie; údaje o víze sa evidujú osobitne pri pobyte."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetHotel_Guests",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetHotel_Guests.htm#M:Exa.OBERON.Services.IOBERONService.GetHotel_Guests(Exa.OBERON.Services.OBERON.Hotel_GuestsGetArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_GuestsGetArg_GUID.htm#F:Exa.OBERON.Services.OBERON.Hotel_GuestsGetArg.GUID",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_GuestsGetArg_ParentType.htm#F:Exa.OBERON.Services.OBERON.Hotel_GuestsGetArg.ParentType",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Guest_IDNum.htm#F:Exa.OBERON.Services.OBERON.Hotel_Guest.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Guest_PhoneNumber.htm#F:Exa.OBERON.Services.OBERON.Hotel_Guest.PhoneNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Guest_Email.htm#F:Exa.OBERON.Services.OBERON.Hotel_Guest.Email",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#T:Exa.OBERON.Hotel.Guests.Guest_List",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Guests.Guest.Name",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Guests.Guest.FamilyName",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.Guests.Guest.DocumentIdentification_Number",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#T:Exa.OBERON.Hotel.Guests.Guest"
+    ]
+  },
+  {
+    "rpc": "GetHotelRoomReservations",
+    "description": "Kontext backendu: vyhľadanie konkrétnej rezervácie ubytovania; zoznam rezervácií podľa izby a termínu gateway nie je potvrdený.",
+    "fields": {},
+    "messageFields": {
+      "GetHotelRoomReservationsResponse.reservations": "Údaje rezervácií ubytovania.",
+      "HotelReservation.checkInDate": "Kontext rezervácie: dátum príchodu; pôvodné DTO uvádza yyyy-MM-ddTHH:mm:ss, nie formát gateway.",
+      "HotelReservation.checkOutDate": "Kontext rezervácie: dátum odchodu; pôvodné DTO uvádza yyyy-MM-ddTHH:mm:ss, pásmo nie je určené.",
+      "HotelReservation.status": "Iba backendový kontext: 16 = nepotvrdená, 32 = potvrdená rezervácia; textové hodnoty gateway nie sú doložené."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "G1 neuvádza v dodanej schéme význam filtrov roomGuid, checkInDate a checkOutDate ani inkluzívnosť dátumov.",
+      "Rezervácia, hosť a izba majú samostatné identity. Jedna rezervácia môže obsahovať viac izieb. Textové stavy a výber zoznamu gateway nie sú doložené.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway.",
+      "Natívne termíny sú dátum a čas príchodu a odchodu, nie dátum evidencie ani skončenia platnosti rezervácie. Filter RPC, hranice intervalu a serializácia gateway nie sú doložené."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetHotel_RoomReservation",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetHotel_RoomReservation.htm#M:Exa.OBERON.Services.IOBERONService.GetHotel_RoomReservation(Exa.OBERON.Services.OBERON.Hotel_ReservationArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Reservation_DateArrival.htm#F:Exa.OBERON.Services.OBERON.Hotel_Reservation.DateArrival",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Reservation_DateDeparture.htm#F:Exa.OBERON.Services.OBERON.Hotel_Reservation.DateDeparture",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_Hotel_Reservation_ReservationState.htm#F:Exa.OBERON.Services.OBERON.Hotel_Reservation.ReservationState",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.ReservationBook.Reservation.Items_Room",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.ReservationBook.Reservation.Reservation_Name",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.ReservationBook.Reservation.DateTime_Arrival",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.ReservationBook.Reservation.DateTime_Departure",
+      "Rudo_knowledge/SandCastle_Hotel/Help/OBERON_HotelReferenceGuide.chm#P:Exa.OBERON.Hotel.ReservationBook.Reservation.State"
+    ]
+  },
+  {
+    "rpc": "GetFoodMenuList",
+    "description": "Vráti zoznam jedálnych lístkov, nie zoznam ich skladových položiek.",
+    "fields": {},
+    "messageFields": {
+      "FoodMenuItem.id": "Kontext DTO položky: identifikátor skladovej karty.",
+      "FoodMenuItem.name": "Názov skladovej karty v jedálnom lístku.",
+      "FoodMenuItem.price": "Cena na jedálnom lístku; mena ani zahrnutie DPH tu nie sú doložené.",
+      "FoodMenuItem.category": "Kontext DTO: zoznam názvov kategórií položky, nie GUID kategórie."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "Zdroj G1 opisuje zoznam menu, zatiaľ čo RPC vracia FoodMenuItem. Nemožno ho bez implementačného dôkazu zameniť so zoznamom jednotlivých jedál.",
+      "Zásadný rozdiel: backend vracia hlavičky FoodMenu, gateway používa položky FoodMenuItem. Fakty o položkách sú uvedené iba ako kontext samostatného DTO, nie potvrdený obsah tohto zoznamu.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetFoodMenuList",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetFoodMenuList.htm#M:Exa.OBERON.Services.IOBERONService.GetFoodMenuList",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/T_Exa_OBERON_Services_OBERON_FoodMenu.htm#T:Exa.OBERON.Services.OBERON.FoodMenu",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/T_Exa_OBERON_Services_OBERON_FoodMenuItem.htm#T:Exa.OBERON.Services.OBERON.FoodMenuItem",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_IDNum.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_Name.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_Price.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.Price",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_Category.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.Category"
+    ]
+  },
+  {
+    "rpc": "GetFoodMenuGroupList",
+    "description": "Vráti skupiny jedálneho lístka; backend ich používa aj v režime FastFood.",
+    "fields": {},
+    "messageFields": {
+      "GetFoodMenuGroupListResponse.groups": "Kontext backendu: skupiny jedálneho lístka.",
+      "FoodMenuGroup.name": "Názov skupiny jedálneho lístka.",
+      "FoodMenuGroup.displayOrder": "Kontext DTO: hodnota pre triedenie skupiny; rozsah gateway nie je doložený."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "FastFood je iba backendový kontext skupín; identifikátor gateway a prevod Sort z Int64 do displayOrder nie sú potvrdené.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetFoodMenuGroupList",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetFoodMenuGroupList.htm#M:Exa.OBERON.Services.IOBERONService.GetFoodMenuGroupList(Exa.OBERON.Services.OBERON.FoodMenuGroupArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuGroup_Name.htm#P:Exa.OBERON.Services.OBERON.FoodMenuGroup.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuGroup_Sort.htm#P:Exa.OBERON.Services.OBERON.FoodMenuGroup.Sort"
+    ]
+  },
+  {
+    "rpc": "GetFoodMenu",
+    "description": "Načíta položky vybraného jedálneho lístka; kategorizované vnorenie gateway nie je potvrdené.",
+    "fields": {
+      "foodMenuName": "Názov jedálneho lístka na načítanie."
+    },
+    "messageFields": {
+      "FoodMenuCategory.id": "Kontext DTO: identifikátor kategórie jedálneho lístka.",
+      "FoodMenuCategory.name": "Názov kategórie jedálneho lístka.",
+      "FoodMenuItem.id": "Kontext DTO položky: identifikátor skladovej karty.",
+      "FoodMenuItem.name": "Názov skladovej karty v jedálnom lístku.",
+      "FoodMenuItem.price": "Cena na jedálnom lístku; mena ani zahrnutie DPH tu nie sú doložené.",
+      "FoodMenuItem.category": "Kontext DTO: zoznam názvov kategórií položky, nie GUID kategórie."
+    },
+    "notes": [
+      "Ide o kontext zo zdrojovej dokumentácie backendu, nie o dôkaz smerovania RPC ani zhodného tvaru požiadavky a odpovede.",
+      "G1 v dodanej schéme neuvádza categoryGuid ani foodMenuName; spôsob výberu menu v RPC nie je doložený.",
+      "Backendová signatúra vracia položky, sprievodný text uvádza skupiny; vnorené kategórie gateway ani categoryGuid nie sú potvrdené. Nedostupnosť položky nie je doložená inverzia isActive.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "oberon-api-docs/code/openapi.json#GetFoodMenu",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetFoodMenu.htm#M:Exa.OBERON.Services.IOBERONService.GetFoodMenu(Exa.OBERON.Services.OBERON.FoodMenuArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_FoodMenuArg_FoodMenuName.htm#F:Exa.OBERON.Services.OBERON.FoodMenuArg.FoodMenuName",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuCategory_ID.htm#P:Exa.OBERON.Services.OBERON.FoodMenuCategory.ID",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuCategory_Name.htm#P:Exa.OBERON.Services.OBERON.FoodMenuCategory.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_IDNum.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_Name.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_Price.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.Price",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_FoodMenuItem_Category.htm#P:Exa.OBERON.Services.OBERON.FoodMenuItem.Category"
+    ]
+  },
+  {
+    "rpc": "GetCashRegisterTransaction",
+    "description": "Kontext dokumentácie: načítanie pokladničného dokladu; väzba na konkrétnu transakciu gateway nie je potvrdená.",
+    "fields": {},
+    "messageFields": {
+      "GetCashRegisterTransactionResponse.transaction": "Kontext backendu: pokladničný doklad; mapovanie transakcie gateway nie je potvrdené.",
+      "CashRegisterTransaction.number": "Kontext DTO bločku: číslo dokladu.",
+      "CashRegisterTransaction.date": "Kontext DTO bločku: dátum a čas zaevidovania alebo vytlačenia, v pôvodnom SOAP formáte.",
+      "CashRegisterTransaction.lines": "Kontext DTO bločku: položky pokladničného dokladu.",
+      "CashRegisterTransaction.payments": "Kontext DTO bločku: platidlá; jeden doklad môže byť uhradený viacerými platidlami.",
+      "CashRegisterTransactionLine.id": "Kontext DTO: identifikátor položky pokladničného dokladu.",
+      "CashRegisterTransactionLine.productId": "Kontext DTO: identifikátor skladovej karty; pôvodné DTO používa 0 pre neskladovú položku.",
+      "CashRegisterTransactionLine.productName": "Názov položky pokladničného dokladu.",
+      "CashRegisterTransactionLine.quantity": "Kontext DTO: množstvo v základnej mernej jednotke položky.",
+      "CashRegisterTransactionLine.taxRate": "Sadzba DPH položky; kódovanie a presnosť gateway nie sú doložené.",
+      "Payment.type": "Kontext DTO: typ platidla alebo spôsob úhrady; hodnoty textového poľa gateway nie sú doložené.",
+      "Payment.amount": "Iba backendový kontext: BillJournalPaymentItem.Price je uhradená suma v predvolenej mene; prevod na amount gateway nie je potvrdený."
+    },
+    "notes": [
+      "Použitý je iba kontext všeobecného Gen2 BillJournal, nie schéma CashRegisterGen2. Identifikátor, ceny s/bez DPH, mena a stav gateway ostávajú neoverené.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_CashRegister_BillJournal_Get.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.CashRegister_BillJournal_Get(Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalGetArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournalHeader_BillNumber.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalHeader.BillNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournalHeader_DateTime.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalHeader.DateTime",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournal_Items.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournal.Items",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournal_PaymentItems.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournal.PaymentItems",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournalItem.htm#T:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalItem",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_IDNum.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_IDNum_StockCard.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.IDNum_StockCard",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_Name.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_Amount.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.Amount",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_VatRate.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.VatRate",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournalPaymentItem_BillRegisterType.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalPaymentItem.BillRegisterType",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournalPaymentItem_PaymentTypeName.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalPaymentItem.PaymentTypeName",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_CashRegister_BillJournal_BillJournalPaymentItem_Price.htm#P:Exa.OBERON.ServicesGen2.CashRegister.BillJournal.BillJournalPaymentItem.Price"
+    ]
+  },
+  {
+    "rpc": "OpenCashDrawer",
+    "description": "Kontext fiškálneho rozhrania: otvorenie pokladničnej zásuvky; adresovanie zariadenia gateway nie je doložené.",
+    "fields": {},
+    "messageFields": {},
+    "notes": [
+      "Fiškálny ovládač nie je RPC gateway; jeho parameter Boolean nemožno zameniť za deviceId.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_FiscalUniversalInterface/Help/html/2f2b6a77-dbbc-e56c-cbe9-1eaee7c1c57e.htm#M:Exa.OBERON.Devices.FiscalModule.Driver_FiscalModule_UniversalInterface.CashDrawer_Open(System.Boolean)"
+    ]
+  },
+  {
+    "rpc": "PrintReceipt",
+    "description": "Kontext fiškálneho rozhrania: tlač kópie dokladu; presný postup a parametre gateway nie sú doložené.",
+    "fields": {},
+    "messageFields": {},
+    "notes": [
+      "Kópia dokladu vo fiškálnom module nepotvrdzuje tlač gateway podľa transakcie, tlačiarne a počtu kópií.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_FiscalUniversalInterface/Help/html/b8d4ccd4-9922-5c16-de28-437979fbf6df.htm#M:Exa.OBERON.Devices.FiscalModule.Driver_FiscalModule_UniversalInterface.Print_Document_Copy(Exa.OBERON.Devices.FiscalModule.Driver_Common.enm_Fiskal_Document_Copy,System.DateTime,System.Int64,System.Int64)"
+    ]
+  },
+  {
+    "rpc": "GetLoyaltyCard",
+    "description": "Načíta konkrétnu vernostnú kartu podľa jej čísla.",
+    "fields": {
+      "cardNumber": "Číslo vernostnej karty na vyhľadanie."
+    },
+    "messageFields": {
+      "GetLoyaltyCardResponse.card": "Kontext backendu: údaje o konkrétnej vernostnej karte.",
+      "LoyaltyCard.id": "Kontext DTO: číslo databázového záznamu vernostnej karty.",
+      "LoyaltyCard.cardNumber": "Číslo vernostnej karty; v pôvodnom systéme musí byť jedinečné.",
+      "LoyaltyCard.points": "Aktuálny počet bodov na karte.",
+      "LoyaltyCard.created": "Dátum vytvorenia karty; pôvodné DTO uvádza SOAP formát."
+    },
+    "notes": [
+      "Iba backendový stav karty: -1 expirovaná, 0 blokovaná, 1 aktívna. Platnosť a aktívnosť nie sú automaticky rovnaký príznak; celoživotné body nie sú doložené.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONLoyaltySystemService_GetLoyaltyCard.htm#M:Exa.OBERON.Services.IOBERONLoyaltySystemService.GetLoyaltyCard(System.String)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_LoyaltyCard_IDNum.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCard.IDNum",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_LoyaltyCard_Number.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCard.Number",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_LoyaltyCard_TotalPoints.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCard.TotalPoints",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_LoyaltyCard_DateCreated.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCard.DateCreated"
+    ]
+  },
+  {
+    "rpc": "AddLoyaltyPoints",
+    "description": "Kontext vernostného backendu: transakcia pripísania bodov; samostatný kontrakt gateway nie je doložený.",
+    "fields": {
+      "cardNumber": "Kontext DTO vernostnej transakcie: číslo vernostnej karty.",
+      "points": "Iba backendový kontext: CreditPoints (21) prijíma vypočítaný počet bodov; režim, znamienko a limity gateway nie sú potvrdené."
+    },
+    "messageFields": {
+      "AddLoyaltyPointsResponse.newBalance": "Kontext návratového DTO: aktuálny počet bodov na karte po transakcii."
+    },
+    "notes": [
+      "Iba backendové CreditPoints = 21 prijíma vypočítané body; CreditPrice = 22 prijíma sumu dokladu a body vypočíta. Gateway režim, limity a znamienko points nie sú potvrdené.",
+      "Kontextové významy vychádzajú z typovaných backendových DTO; nejde o potvrdenie prevodu, pravidiel ani predvolených hodnôt gateway."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONLoyaltySystemService_SetLoyaltyCardTransaction.htm#M:Exa.OBERON.Services.IOBERONLoyaltySystemService.SetLoyaltyCardTransaction(Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCardTransaction)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/T_Exa_OBERON_Shared_LoyaltyCardSystems_Structures_enm_LoyaltyCardTransactionType.htm#T:Exa.OBERON.Shared.LoyaltyCardSystems.Structures.enm_LoyaltyCardTransactionType",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_LoyaltyCardTransaction_CardNumber.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCardTransaction.CardNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_LoyaltyCardTransaction_TypeValue.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_LoyaltyCardTransaction.TypeValue",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Shared_LoyaltyCardSystems_Drivers_OBERONLoyaltySystemClient_WS_TransactionResultData_LoyaltyCardTotalPoints.htm#P:Exa.OBERON.Shared.LoyaltyCardSystems.Drivers.OBERONLoyaltySystemClient.WS_TransactionResultData.LoyaltyCardTotalPoints"
+    ]
+  },
+  {
+    "rpc": "Ping",
+    "description": "Backendová metóda overuje dostupnosť webovej služby. Dokumentácia opisuje aj vrátenie IP adresy, nie prenos či echo textu v gRPC poli message.",
+    "fields": {},
+    "messageFields": {},
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_Ping.htm#M:Exa.OBERON.Services.IOBERONService.Ping"
+    ]
+  },
+  {
+    "rpc": "GetVersion",
+    "description": "Vráti informáciu o verzii webovej služby. Backend rozlišuje verziu rozhrania a verziu OBERON-u; rozšírené metadáta gatewaya nie sú v tomto popise potvrdené.",
+    "fields": {},
+    "messageFields": {
+      "VersionInfo.version": "Kontext backendu: verzia rozhrania webovej služby; odlišuje sa od verzie OBERON-u. Presné mapovanie gateway poľa nie je doložené."
+    },
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetVersion.htm#M:Exa.OBERON.Services.IOBERONService.GetVersion",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/F_Exa_OBERON_Services_OBERON_VersionInfo_InterfaceVersion.htm#F:Exa.OBERON.Services.OBERON.VersionInfo.InterfaceVersion"
+    ]
+  },
+  {
+    "rpc": "GetDateTime",
+    "description": "Vráti dátum a čas počítača, na ktorom beží backendová webová služba. Backendový textový formát sám nepotvrdzuje formát gRPC obalu dátumu.",
+    "fields": {},
+    "messageFields": {
+      "OberonDateTime.value": "Kontext backendu: dátum a čas hostiteľského počítača služby. Backend uvádza textový dátum; kódovanie gRPC obalu nie je doložené."
+    },
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONCashRegisterService_GetDateTime.htm#M:Exa.OBERON.Services.IOBERONCashRegisterService.GetDateTime"
+    ]
+  },
+  {
+    "rpc": "Authenticate",
+    "description": "Dokumentácia backendu opisuje prihlasovacie meno v štruktúre UserInfo. Samotná gateway operácia a jej mapovanie na backend nie sú doložené.",
+    "fields": {
+      "username": "Kontext backendového prihlásenia: meno používateľa. Tento význam názvu parametra nedokladá mechanizmus autentifikácie gatewaya."
+    },
+    "messageFields": {
+      "UserInfo.username": "Kontext backendového UserInfo: prihlasovacie meno používateľa do systému OBERON. Identita a projekcia gateway používateľa nie sú tým potvrdené."
+    },
+    "notes": [
+      "Len význam dokumentovaného používateľského atribútu; nie dôkaz gatewayAuth, získania JWT ani správy gateway relácií."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesGen2.Users.UserInfo.UserName",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Users.UserInfo.UserName",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserLoginArg_UserName.htm#P:Exa.OBERON.ServicesGen2.Users.UserLoginArg.UserName"
+    ]
+  },
+  {
+    "rpc": "Logout",
+    "description": "Odhlási používateľa z backendovej webovej služby. Backendový identifikátor používateľa nie je doloženým ekvivalentom sessionId gatewaya.",
+    "fields": {},
+    "messageFields": {},
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_Logout.htm#M:Exa.OBERON.Services.IOBERONService.Logout(System.String)"
+    ]
+  },
+  {
+    "rpc": "GetLoginSalt",
+    "description": "Získa SALT pre používateľa pred backendovým prihlásením. SALT slúži na prípravu hashu hesla; nejde o potvrdenie mechanizmu autentifikácie gatewaya.",
+    "fields": {
+      "username": "Meno používateľa, pre ktorého backend vygeneruje SALT použitý pri nasledujúcom prihlásení."
+    },
+    "messageFields": {
+      "LoginSaltResponse.data": "SALT vrátený backendom na prípravu prihlasovacieho hashu hesla; nie identifikátor gateway relácie.",
+      "LoginSaltResponse.result": "Kontext backendového výsledku: príznak úspechu alebo neúspechu volanej metódy.",
+      "LoginSaltResponse.description": "Kontext backendového výsledku: text chyby. Nie všeobecný popis používateľskej relácie."
+    },
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetLoginSalt.htm#M:Exa.OBERON.Services.IOBERONService.GetLoginSalt(System.String)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_result.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_description.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.description"
+    ]
+  },
+  {
+    "rpc": "GetLoginSalts",
+    "description": "Kontext backendov: G1, G2 a pokladničné G2 získavajú SALT pred prihlásením používateľa. Agregácia ich výsledkov do jednej gateway odpovede nie je v backendovej príručke opísaná.",
+    "fields": {
+      "username": "Kontext backendov: meno používateľa, pre ktorého sa získava SALT pred prihlásením."
+    },
+    "messageFields": {
+      "LoginSaltsResponse.gen1Salt": "Kontext príslušného backendu: SALT pre prípravu prihlasovacieho hashu. Agregované gateway pole ani jeho dostupnosť backendová príručka neurčuje.",
+      "LoginSaltsResponse.gen2Salt": "Kontext príslušného backendu: SALT pre prípravu prihlasovacieho hashu. Agregované gateway pole ani jeho dostupnosť backendová príručka neurčuje.",
+      "LoginSaltsResponse.cashRegisterGen2Salt": "Kontext príslušného backendu: SALT pre prípravu prihlasovacieho hashu. Agregované gateway pole ani jeho dostupnosť backendová príručka neurčuje.",
+      "LoginSaltsResponse.result": "Kontext backendového výsledku: príznak úspechu alebo neúspechu volanej metódy.",
+      "LoginSaltsResponse.description": "Kontext backendového výsledku: text chyby. Nie všeobecný popis používateľskej relácie."
+    },
+    "notes": [
+      "Dokumentácia backendov nepotvrdzuje výber backendu ani čiastkové úspechy agregovaného RPC."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_GetLoginSalt.htm#M:Exa.OBERON.Services.IOBERONService.GetLoginSalt(System.String)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_User_LoginSalt.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.User_LoginSalt(System.String)",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/M_Exa_OBERON_ServicesCashRegisterGen2_IOBERONServiceCashRegisterGen2_User_LoginSalt.htm#M:Exa.OBERON.ServicesCashRegisterGen2.IOBERONServiceCashRegisterGen2.User_LoginSalt(System.String)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_result.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_description.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.description"
+    ]
+  },
+  {
+    "rpc": "LoginUser",
+    "description": "Prihlási používateľa do backendovej webovej služby podľa jej spôsobu autentifikácie. Backendový GUID/userData sa nesmie bez dôkazu zameniť za sessionId gatewaya.",
+    "fields": {
+      "username": "Meno používateľa prihlasovaného do backendovej webovej služby.",
+      "passwordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "gen1PasswordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "gen2PasswordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "cashRegisterGen2PasswordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy."
+    },
+    "messageFields": {
+      "ProxyLoginResponse.result": "Kontext backendového výsledku: príznak úspechu alebo neúspechu volanej metódy.",
+      "ProxyLoginResponse.description": "Kontext backendového výsledku: text chyby. Nie všeobecný popis používateľskej relácie."
+    },
+    "notes": [
+      "Hashovanie opísané pri backendovom prihlásení nie je dôkazom mechanizmu gatewayAuth."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_LoginUser.htm#M:Exa.OBERON.Services.IOBERONService.LoginUser(System.String,System.String)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_LoginDataParameters_Password.htm#P:Exa.OBERON.Services.OBERON.LoginDataParameters.Password",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserLoginArg_Password.htm#P:Exa.OBERON.ServicesGen2.Users.UserLoginArg.Password",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Users_UserLoginArg_Password.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Users.UserLoginArg.Password",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_result.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_description.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.description"
+    ]
+  },
+  {
+    "rpc": "LoginUserEx",
+    "description": "Prihlási používateľa do backendovej webovej služby podľa jej spôsobu autentifikácie. Backendový GUID/userData sa nesmie bez dôkazu zameniť za sessionId gatewaya.",
+    "fields": {
+      "username": "Meno používateľa prihlasovaného do backendovej webovej služby.",
+      "passwordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "gen1PasswordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "gen2PasswordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "cashRegisterGen2PasswordHash": "Kontext backendového prihlásenia: hash hesla, prípadne doplneného o SALT. Backendová príručka nepotvrdzuje prioritu ani výber gateway polí pre jednotlivé backendy.",
+      "loginTag": "Ľubovoľný textový identifikátor uložený backendovou službou; môže pomôcť pri identifikácii pripojených externých zariadení."
+    },
+    "messageFields": {
+      "ProxyLoginResponse.result": "Kontext backendového výsledku: príznak úspechu alebo neúspechu volanej metódy.",
+      "ProxyLoginResponse.description": "Kontext backendového výsledku: text chyby. Nie všeobecný popis používateľskej relácie."
+    },
+    "notes": [
+      "Hashovanie opísané pri backendovom prihlásení nie je dôkazom mechanizmu gatewayAuth."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_LoginUserEx.htm#M:Exa.OBERON.Services.IOBERONService.LoginUserEx(Exa.OBERON.Services.OBERON.LoginDataParameters)",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_LoginDataParameters_UserName.htm#P:Exa.OBERON.Services.OBERON.LoginDataParameters.UserName",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_LoginDataParameters_Password.htm#P:Exa.OBERON.Services.OBERON.LoginDataParameters.Password",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserLoginArg_Password.htm#P:Exa.OBERON.ServicesGen2.Users.UserLoginArg.Password",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Users_UserLoginArg_Password.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Users.UserLoginArg.Password",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_LoginDataParameters_LoginTag.htm#P:Exa.OBERON.Services.OBERON.LoginDataParameters.LoginTag",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_result.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_description.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.description"
+    ]
+  },
+  {
+    "rpc": "IsLogin",
+    "description": "Overí, či je používateľ prihlásený do backendovej webovej služby; správanie závisí od spôsobu autentifikácie. Mapovanie gateway relácie nie je doložené.",
+    "fields": {},
+    "messageFields": {
+      "IsLoginResponse.isLoggedIn": "Kontext backendu: výsledok overenia prihlásenia používateľa; posudzuje sa podľa nastaveného spôsobu autentifikácie."
+    },
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/M_Exa_OBERON_Services_IOBERONService_IsLogin.htm#M:Exa.OBERON.Services.IOBERONService.IsLogin(System.String)"
+    ]
+  },
+  {
+    "rpc": "GetSessionInfo",
+    "description": "Dokumentácia backendu opisuje prihlasovacie meno v štruktúre UserInfo. Samotná gateway operácia a jej mapovanie na backend nie sú doložené.",
+    "fields": {},
+    "messageFields": {
+      "UserInfo.username": "Kontext backendového UserInfo: prihlasovacie meno používateľa do systému OBERON. Identita a projekcia gateway používateľa nie sú tým potvrdené."
+    },
+    "notes": [
+      "Len význam dokumentovaného používateľského atribútu; nie dôkaz gatewayAuth, získania JWT ani správy gateway relácií."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesGen2.Users.UserInfo.UserName",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Users.UserInfo.UserName"
+    ]
+  },
+  {
+    "rpc": "GetUserInfo",
+    "description": "Dokumentácia backendu opisuje prihlasovacie meno v štruktúre UserInfo. Samotná gateway operácia a jej mapovanie na backend nie sú doložené.",
+    "fields": {},
+    "messageFields": {
+      "UserInfo.username": "Kontext backendového UserInfo: prihlasovacie meno používateľa do systému OBERON. Identita a projekcia gateway používateľa nie sú tým potvrdené."
+    },
+    "notes": [
+      "Len význam dokumentovaného používateľského atribútu; nie dôkaz gatewayAuth, získania JWT ani správy gateway relácií."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesGen2.Users.UserInfo.UserName",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Users.UserInfo.UserName"
+    ]
+  },
+  {
+    "rpc": "SearchUsers",
+    "description": "Dokumentácia backendu opisuje prihlasovacie meno v štruktúre UserInfo. Samotná gateway operácia a jej mapovanie na backend nie sú doložené.",
+    "fields": {},
+    "messageFields": {
+      "UserInfo.username": "Kontext backendového UserInfo: prihlasovacie meno používateľa do systému OBERON. Identita a projekcia gateway používateľa nie sú tým potvrdené."
+    },
+    "notes": [
+      "Len význam dokumentovaného používateľského atribútu; nie dôkaz gatewayAuth, získania JWT ani správy gateway relácií."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesGen2.Users.UserInfo.UserName",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Users_UserInfo_UserName.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Users.UserInfo.UserName"
+    ]
+  },
+  {
+    "rpc": "GetInvoice",
+    "description": "Kontext backendu: jednotlivá faktúra sa načítava samostatne z knihy pohľadávok alebo záväzkov. Príručka nepotvrdzuje, na ktorú evidenciu ani identifikátor sa generické gateway RPC mapuje.",
+    "fields": {},
+    "messageFields": {
+      "Invoice.number": "Kontext faktúry: číslo dokladu v evidencii. Nie je to dôkaz, že pole id používa číslo dokladu alebo backendový GUID.",
+      "Invoice.note": "Kontext faktúry: poznámka k dokladu. Presné mapovanie gateway poľa na hlavičku faktúry nie je doložené.",
+      "Invoice.lines": "Kontext faktúry: zoznam položiek dokladu; backendové faktúry obsahujú hlavičku aj položky.",
+      "Invoice.currency": "Kontext faktúry: kód meny, v ktorej sú vyjadrené sumy. Backend odlišuje predvolenú a cudziu menu; voľba a konverzia gatewaya nie sú doložené.",
+      "InvoiceLine.productName": "Kontext položky faktúry: názov položky. Názov položky sám nepotvrdzuje identitu skladovej karty v poli productId.",
+      "InvoiceLine.quantity": "Kontext položky faktúry: množstvo v základnej mernej jednotke. Mapovanie jednotky a reprezentácia gateway desatinnej hodnoty nie sú doložené.",
+      "InvoiceLine.taxRate": "Kontext položky faktúry: sadzba DPH. Backendový opis nepotvrdzuje konverziu sadzby do textového gRPC obalu.",
+      "GetInvoiceResponse.invoice": "Kontext backendu: faktúra s hlavičkou a položkami. Rozlíšenie vydanej/prijatej faktúry a úplnosť gateway projekcie nie sú doložené."
+    },
+    "notes": [],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_InvoiceIssued_Get.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.InvoiceIssued_Get(Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedGetArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_InvoiceReceived_Get.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.InvoiceReceived_Get(Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedGetArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssuedHeader_Number.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedHeader.Number",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceivedHeader_Number.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedHeader.Number",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssuedHeader_Notice.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedHeader.Notice",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceivedHeader_Notice.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedHeader.Notice",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssued_Items.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssued.Items",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceived_Items.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceived.Items",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentTotal_FCCode.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentTotal.FCCode",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssuedItem.htm#T:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedItem",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceivedItem.htm#T:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedItem",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_Name.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_Amount.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.Amount",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_VatRate.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.VatRate",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssued.htm#T:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssued",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceived.htm#T:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceived"
+    ]
+  },
+  {
+    "rpc": "CreateInvoice",
+    "description": "Kontext backendu: nová faktúra sa vytvára s hlavičkou a položkami v príslušnej knihe faktúr. Výber evidencie, konverzia údajov a pravidlá gateway RPC nie sú doložené.",
+    "fields": {
+      "lines": "Kontext vytvorenia faktúry: zoznam položiek nového dokladu. Gateway prevod položiek a pravidlá výpočtu súm backendová príručka nepotvrdzuje.",
+      "note": "Kontext faktúry: poznámka k dokladu. Nejde o potvrdenie gateway importných pravidiel.",
+      "currency": "Kontext faktúry: kód meny súm dokladu. Backend odlišuje predvolenú a cudziu menu; pravidlá konverzie gatewaya nie sú doložené."
+    },
+    "messageFields": {
+      "InvoiceLine.productName": "Kontext položky faktúry: názov položky. Názov položky sám nepotvrdzuje identitu skladovej karty v poli productId.",
+      "InvoiceLine.quantity": "Kontext položky faktúry: množstvo v základnej mernej jednotke. Mapovanie jednotky a reprezentácia gateway desatinnej hodnoty nie sú doložené.",
+      "InvoiceLine.taxRate": "Kontext položky faktúry: sadzba DPH. Backendový opis nepotvrdzuje konverziu sadzby do textového gRPC obalu."
+    },
+    "notes": [
+      "Faktúry vydané a prijaté sú odlišné backendové entity; generická gateway faktúra nie je automaticky vydaná faktúra."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_InvoiceIssued_Add.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.InvoiceIssued_Add(Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedAddArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/M_Exa_OBERON_ServicesGen2_IOBERONServiceGen2_InvoiceReceived_Add.htm#M:Exa.OBERON.ServicesGen2.IOBERONServiceGen2.InvoiceReceived_Add(Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedAddArg)",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssuedItem.htm#T:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedItem",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/T_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceivedItem.htm#T:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedItem",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_Name.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.Name",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_Amount.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.Amount",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentItemBase_VatRate.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentItemBase.VatRate",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssued_Items.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssued.Items",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceived_Items.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceived.Items",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesIssued_InvoiceIssuedHeader_Notice.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesIssued.InvoiceIssuedHeader.Notice",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Stock_InvoicesReceived_InvoiceReceivedHeader_Notice.htm#P:Exa.OBERON.ServicesGen2.Stock.InvoicesReceived.InvoiceReceivedHeader.Notice",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Common_Document_DocumentTotal_FCCode.htm#P:Exa.OBERON.ServicesGen2.Common.Document.DocumentTotal.FCCode"
+    ]
+  },
+  {
+    "rpc": "CallG2Procedure",
+    "description": "Kontext backendu: rozhranie komunikuje JSON dátovými správami. Príručka backendu nepotvrdzuje generický dispatcher gatewaya ani spôsob výberu operácie.",
+    "fields": {
+      "jsonPayload": "Reťazec nesúci JSON požiadavku podľa protobuf kontraktu. Backend dokumentuje JSON dátové správy, nie schému generického gateway vstupu; obchodné polia patria dovnútra reťazca."
+    },
+    "messageFields": {
+      "G2ProcedureCallResponse.result": "Kontext backendového obalu: výsledok úspechu alebo neúspechu volanej metódy.",
+      "G2ProcedureCallResponse.errNumber": "Kontext backendového obalu: číslo chyby, prípadne kód vrátený nižšou vrstvou OBERON API.",
+      "G2ProcedureCallResponse.description": "Kontext backendového obalu: text chyby.",
+      "G2ProcedureCallResponse.dataJson": "Kontext backendového obalu: dáta návratového typu závisia od volanej metódy. Ich gateway serializácia do dataJson nie je backendovou príručkou určená."
+    },
+    "notes": [
+      "jsonPayload zostáva reťazec podľa protobuf kontraktu; žiadne typované business polia z backendových operácií sa nepridávajú."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/N_Exa_OBERON_ServicesGen2.htm#N:Exa.OBERON.ServicesGen2",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_ResultValue_1_result.htm#P:Exa.OBERON.ServicesGen2.Base.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_ResultValue_1_errNumber.htm#P:Exa.OBERON.ServicesGen2.Base.ResultValue`1.errNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_ResultValue_1_description.htm#P:Exa.OBERON.ServicesGen2.Base.ResultValue`1.description",
+      "Rudo_knowledge/SandCastle_WebServicesGen2/Help/html/P_Exa_OBERON_ServicesGen2_Base_ResultValue_1_data.htm#P:Exa.OBERON.ServicesGen2.Base.ResultValue`1.data"
+    ]
+  },
+  {
+    "rpc": "CallG1Procedure",
+    "description": "Kontext backendu G1: rozhranie poskytuje pomenované operácie a návratový obal ResultValue. Generické volanie gatewaya ani jeho výber rozhrania príručka samostatne nepopisuje.",
+    "fields": {},
+    "messageFields": {
+      "G1ProcedureCallResponse.result": "Kontext backendového obalu: výsledok úspechu alebo neúspechu volanej metódy.",
+      "G1ProcedureCallResponse.errNumber": "Kontext backendového obalu: číslo chyby, prípadne kód vrátený nižšou vrstvou OBERON API.",
+      "G1ProcedureCallResponse.description": "Kontext backendového obalu: text chyby.",
+      "G1ProcedureCallResponse.dataJson": "Kontext backendového obalu: dáta návratového typu závisia od volanej metódy. Ich gateway serializácia do dataJson nie je backendovou príručkou určená."
+    },
+    "notes": [
+      "jsonPayload zostáva reťazec podľa protobuf kontraktu; žiadne typované business polia z backendových operácií sa nepridávajú."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/T_Exa_OBERON_Services_IOBERONService.htm#T:Exa.OBERON.Services.IOBERONService",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_result.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_errNumber.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.errNumber",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_description.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.description",
+      "Rudo_knowledge/SandCastle_WebServicesGen1/Help/html/P_Exa_OBERON_Services_OBERON_ResultValue_1_data.htm#P:Exa.OBERON.Services.OBERON.ResultValue`1.data"
+    ]
+  },
+  {
+    "rpc": "CallCRG2Procedure",
+    "description": "Kontext backendu: rozhranie komunikuje JSON dátovými správami. Príručka backendu nepotvrdzuje generický dispatcher gatewaya ani spôsob výberu operácie.",
+    "fields": {
+      "jsonPayload": "Reťazec nesúci JSON požiadavku podľa protobuf kontraktu. Backend dokumentuje JSON dátové správy, nie schému generického gateway vstupu; obchodné polia patria dovnútra reťazca."
+    },
+    "messageFields": {
+      "CRG2ProcedureCallResponse.result": "Kontext backendového obalu: výsledok úspechu alebo neúspechu volanej metódy.",
+      "CRG2ProcedureCallResponse.errNumber": "Kontext backendového obalu: číslo chyby, prípadne kód vrátený nižšou vrstvou OBERON API.",
+      "CRG2ProcedureCallResponse.description": "Kontext backendového obalu: text chyby.",
+      "CRG2ProcedureCallResponse.dataJson": "Kontext backendového obalu: dáta návratového typu závisia od volanej metódy. Ich gateway serializácia do dataJson nie je backendovou príručkou určená."
+    },
+    "notes": [
+      "jsonPayload zostáva reťazec podľa protobuf kontraktu; žiadne typované business polia z backendových operácií sa nepridávajú."
+    ],
+    "sources": [
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/N_Exa_OBERON_ServicesCashRegisterGen2.htm#N:Exa.OBERON.ServicesCashRegisterGen2",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Base_ResultValue_1_result.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Base.ResultValue`1.result",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Base_ResultValue_1_errNumber.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Base.ResultValue`1.errNumber",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Base_ResultValue_1_description.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Base.ResultValue`1.description",
+      "Rudo_knowledge/SandCastle_WebServicesCashRegisterGen2/Help/html/P_Exa_OBERON_ServicesCashRegisterGen2_Base_ResultValue_1_data.htm#P:Exa.OBERON.ServicesCashRegisterGen2.Base.ResultValue`1.data"
+    ]
+  }
+]

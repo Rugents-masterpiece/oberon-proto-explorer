@@ -1,0 +1,84 @@
+@using System.Text.Json.Nodes
+
+<fieldset class="request-fields" disabled="@Disabled">
+@if (Fields.Count == 0)
+{
+    <p class="hint">Táto požiadavka nemá deklarované vstupné polia.</p>
+}
+@foreach (var field in Fields)
+{
+    var key = field.JsonName;
+    <div class="request-field" @key="key">
+        <div class="field-title"><label for="@FieldId(key)">@key</label><code>@field.Type@(field.IsRepeated ? "[]" : "")</code>
+            <label class="include-field"><input type="checkbox" name="include-@key" aria-label="Zahrnúť pole @key" checked="@Present(key)" @onchange="e => Toggle(field, e)" /> zahrnúť</label>
+        </div>
+        <p class="field-description">@field.Description</p>
+        @if (field.IsOptional) { <small class="hint">Voliteľné pole; nezahrnuté pole sa neposiela.</small> }
+        @if (field.EnumValues.Count > 0 && !field.IsRepeated && !field.IsMap)
+        {
+            <select id="@FieldId(key)" name="@key" autocomplete="off" value="@Value(key)" disabled="@(!Present(key))" @onchange="e => Change(field, e.Value?.ToString() ?? string.Empty)">
+                @foreach (var choice in field.EnumValues) { <option value="@choice">@choice</option> }
+            </select>
+        }
+        else if (field.Type.Equals("bool", StringComparison.OrdinalIgnoreCase) && !field.IsRepeated && !field.IsMap)
+        {
+            <input id="@FieldId(key)" name="@key" type="checkbox" checked="@(Value(key) == "true")" disabled="@(!Present(key))" @onchange="e => ChangeBoolean(field, e)" />
+        }
+        else if (Kind(field) is "message" or "array" or "map")
+        {
+            <CodePanel><textarea class="field-json" id="@FieldId(key)" name="@key" autocomplete="off" translate="no" value="@Value(key)" disabled="@(!Present(key))" @onchange="e => Change(field, e.Value?.ToString() ?? string.Empty)" spellcheck="false"></textarea></CodePanel>
+            <small class="hint">Vnorená správa / kolekcia sa upravuje ako JSON. Typy overí protobuf validácia.</small>
+        }
+        else
+        {
+            <input id="@FieldId(key)" name="@key" spellcheck="false" type="@(IsSecret(key) ? "password" : "text")" value="@Value(key)" disabled="@(!Present(key))" @onchange="e => Change(field, e.Value?.ToString() ?? string.Empty)" autocomplete="off" />
+        }
+    </div>
+}
+@if (!string.IsNullOrEmpty(Error)) { <p class="error" role="alert">@Error</p> }
+</fieldset>
+
+@code {
+    [Parameter] public IReadOnlyList<RpcFieldDocumentation> Fields { get; set; } = [];
+    [Parameter] public string Json { get; set; } = "{}";
+    [Parameter] public EventCallback<string> JsonChanged { get; set; }
+    [Parameter] public bool Disabled { get; set; }
+    private string Error = "";
+    private string FieldId(string key) => "field-" + key;
+    private string Value(string key) { try { return RequestEditor.Value(Json, key, Fields.First(f => f.JsonName == key).Name); } catch (ArgumentException) { return ""; } }
+    private bool Present(string key) { try { return RequestEditor.Contains(Json, key, Fields.First(f => f.JsonName == key).Name); } catch (ArgumentException) { return false; } }
+    private static bool IsSecret(string name) => name.Contains("password", StringComparison.OrdinalIgnoreCase) || name.Contains("token", StringComparison.OrdinalIgnoreCase) || name.Contains("session", StringComparison.OrdinalIgnoreCase);
+    private static string Kind(RpcFieldDocumentation field)
+    {
+        if (field.IsMap) return "map";
+        if (field.IsRepeated) return "array";
+        if (field.EnumValues.Count > 0) return "enum";
+        var type = field.Type.ToLowerInvariant();
+        return type is "string" or "bytes" or "bool" or "number" or "double" or "float" or "int32" or "uint32" or "sint32" or "fixed32" or "sfixed32" or "int64" or "uint64" or "sint64" or "fixed64" or "sfixed64" ? type : "message";
+    }
+    private async Task Change(RpcFieldDocumentation field, string value)
+    {
+        if (Disabled) return;
+        Error = "";
+        try { await JsonChanged.InvokeAsync(RequestEditor.Update(Json, field.JsonName, value, Kind(field), field.Name)); }
+        catch (ArgumentException ex) { Error = ex.Message; }
+    }
+    private Task ChangeBoolean(RpcFieldDocumentation field, ChangeEventArgs e) => Change(field, e.Value is true ? "true" : "false");
+    private async Task Toggle(RpcFieldDocumentation field, ChangeEventArgs e)
+    {
+        if (Disabled) return;
+        Error = "";
+        if (e.Value is not true)
+        {
+            try { await JsonChanged.InvokeAsync(RequestEditor.Remove(Json, field.JsonName, field.Name)); }
+            catch (ArgumentException ex) { Error = ex.Message; }
+            return;
+        }
+        var defaultValue = Kind(field) switch
+        {
+            "array" => "[]", "map" or "message" => "{}", "bool" => "false",
+            "enum" => field.EnumValues[0], "string" or "bytes" => "", _ => "0"
+        };
+        await Change(field, defaultValue);
+    }
+}

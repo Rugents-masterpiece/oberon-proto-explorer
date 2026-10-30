@@ -1,0 +1,36 @@
+{
+  "slug": "java",
+  "name": "Java",
+  "intro": "Samostatný štartovací klient Java pre bezpečný test dostupnosti OBERON ServiceGateway: jedno volanie Ping bez hesla a bez zmien údajov.",
+  "prerequisites": "Potrebujete plné JDK 17 alebo novšie (nie iba JRE) a Maven 3.9.9. Maven stiahne pripnuté závislosti a generátory. Potrebujete sieťový prístup na gRPC server a internet pri prvom zostavení. Všetky príkazy spúšťajte z koreňa rozbaleného balíka.",
+  "steps": [
+    {
+      "title": "Overte nástroje",
+      "text": "Potrebujete plné JDK 17 alebo novšie (nie iba JRE) a Maven 3.9.9. Maven stiahne pripnuté závislosti a generátory.",
+      "command": "java -version\njavac -version\nmvn -version"
+    },
+    {
+      "title": "Vygenerujte protobuf a gRPC triedy",
+      "text": "Súbor proto/oberon_service_grpc.proto je súčasťou ZIP. Maven zachová pôvodný proto a vytvorí OberonServiceGrpc (vnorené správy) a OBERONServiceGRPCGrpc (služba) v balíku oberon.servicegateway.",
+      "command": "mvn generate-sources"
+    },
+    {
+      "title": "Zostavte a spustite offline testy",
+      "text": "Testy overujú predvolenú adresu, explicitný host/port a odmietnutie neplatných argumentov bez siete.",
+      "command": "mvn test package"
+    },
+    {
+      "title": "Zavolajte iba Ping",
+      "text": "Argumenty sú host a port. Bez argumentov sa použije 192.168.16.169:21008. Deadline je 10 sekúnd; kanál sa zatvorí aj pri chybe. Pri opakovaných živých volaniach počkajte aspoň 5 sekúnd.",
+      "command": "mvn -q exec:java -Dexec.args=\"192.168.16.169 21008\""
+    }
+  ],
+  "exampleFile": "src/main/java/example/Client.java",
+  "notes": [
+    "Spojenie je plaintext bez TLS. Používajte iba dôveryhodnú LAN; neposielajte prihlasovacie údaje cez nedôveryhodnú sieť. Ping je bez prihlásenia; úspešný Ping nedokazuje funkčnosť autentifikácie ani podnikových procedúr.",
+    "Toto je natívny serverový gRPC klient cez HTTP/2, nie grpc-web pre prehliadač. Prehliadač potrebuje grpc-web klienta a kompatibilnú bránu/proxy; port 21008 je tu overený pre natívny gRPC.",
+    "Autentifikácia (iba vysvetlenie, tento klient ju nevykonáva): zavolajte GetLoginSalts s používateľským menom, pre každý dostupný backend vypočítajte SHA1 zo spojenia salt + heslo zakódovaného vo Windows-1250 a pošlite hexadecimálny hash do príslušného poľa LoginUser. Overte result; úspešné session_id posielajte v metadátach userdata pri ďalších RPC. Heslo, hash ani session_id nevypisujte a neukladajte do zdrojov.",
+    "Klient neprijíma prihlasovacie údaje. Návratové kódy: 0 úspech, 2 neplatné argumenty, 1 chyba RPC. Zdrojový proto nemeňte."
+  ],
+  "example": "package example;\nimport io.grpc.ManagedChannel;\nimport io.grpc.ManagedChannelBuilder;\nimport io.grpc.StatusRuntimeException;\nimport java.util.concurrent.TimeUnit;\nimport oberon.servicegateway.OberonServiceGrpc.PingRequest;\nimport oberon.servicegateway.OBERONServiceGRPCGrpc;\n\npublic final class Client {\n    record Endpoint(String host, int port) {}\n    static Endpoint parseArgs(String[] args) {\n        if (args.length == 0) return new Endpoint(\"192.168.16.169\", 21008);\n        if (args.length != 2 || args[0].isBlank())\n            throw new IllegalArgumentException(\"Usage: Client [host port]\");\n        int port = Integer.parseInt(args[1]);\n        if (port < 1 || port > 65535) throw new IllegalArgumentException(\"Port must be 1..65535\");\n        return new Endpoint(args[0], port);\n    }\n\n    public static void main(String[] args) {\n        Endpoint endpoint;\n        try { endpoint = parseArgs(args); }\n        catch (IllegalArgumentException ex) {\n            System.err.println(ex.getMessage());\n            System.exit(2);\n            return;\n        }\n        System.err.println(\"WARNING: plaintext gRPC; trusted LAN only (no TLS).\");\n        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.host(), endpoint.port()).usePlaintext().build();\n        int exitCode = 0;\n        try {\n            var response = OBERONServiceGRPCGrpc.newBlockingStub(channel)\n                .withDeadlineAfter(10, TimeUnit.SECONDS)\n                .ping(PingRequest.newBuilder().setMessage(\"hello\").build());\n            System.out.println(\"Ping -> \" + response.getMessage());\n        } catch (StatusRuntimeException ex) {\n            System.err.println(\"Ping failed: \" + ex.getStatus().getCode());\n            exitCode = 1;\n        } finally {\n            channel.shutdownNow();\n            try { channel.awaitTermination(5, TimeUnit.SECONDS); }\n            catch (InterruptedException ex) { Thread.currentThread().interrupt(); exitCode = 1; }\n        }\n        if (exitCode != 0) System.exit(exitCode);\n    }\n}\n"
+}

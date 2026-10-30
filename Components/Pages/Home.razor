@@ -1,0 +1,227 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject GrpcExplorer Explorer
+@inject RpcSchemaCatalog Schemas
+@inject ProcedureCatalog Catalog
+@inject IConfiguration Configuration
+@using System.Text.Json
+@using System.Text.Json.Nodes
+@using Exa.OBERON.ServiceGateway.Contracts
+
+<PageTitle>OBERON Proto Explorer</PageTitle>
+<header class="hero"><div class="hero-heading"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M8 7h12v14H8zM8 14H3m17 0h5" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="7" r="3" fill="currentColor"/><circle cx="20" cy="21" r="3" fill="currentColor"/></svg></span><div><h1 translate="no">OBERON ServiceGateway</h1><p>Pracovná plocha pre RPC a obchodné procedúry</p></div></div><div class="hero-tools"><div class="hero-meta"><span class="protocol-tag" translate="no">Protobuf / gRPC</span><div class="endpoint-count"><strong>@Methods.Count</strong><span>RPC metód</span></div></div><HowToRun /></div></header>
+<div class="connection panel">
+    <div><label for="connection-host">Server</label><input id="connection-host" name="host" autocomplete="off" spellcheck="false" @bind="Host" @bind:after="ConnectionChanged" disabled="@Busy" /></div><div><label for="connection-port">gRPC port</label><input id="connection-port" name="port" type="number" inputmode="numeric" autocomplete="off" @bind="Port" @bind:after="ConnectionChanged" disabled="@Busy" /></div><div><label for="connection-user">Používateľ (voliteľný)</label><input id="connection-user" name="username" @bind="Username" autocomplete="username" spellcheck="false" disabled="@Busy" /></div><div><label for="connection-password">Heslo (voliteľné)</label><input id="connection-password" name="password" type="password" @bind="Password" autocomplete="current-password" disabled="@Busy" /></div>
+</div>
+<p class="config-note">Ak sú prihlasovacie polia prázdne, klient použije serverové údaje z ignorovaného súboru .env. Heslo zostáva na serveri.</p>
+<nav class="tabs" aria-label="Výber pracovnej plochy"><button class="@(View == "rpc" ? "active" : "")" aria-pressed="@(View == "rpc" ? "true" : "false")" @onclick="ShowRpc" disabled="@Busy">RPC kontrakt (@Methods.Count)</button><button class="@(View == "procedures" ? "active" : "")" aria-pressed="@(View == "procedures" ? "true" : "false")" @onclick="ShowProcedures" disabled="@Busy">Obchodné procedúry</button></nav>
+@if (View == "rpc")
+{
+<div class="toolbar panel"><input class="search" name="rpc-search" aria-label="Hľadať RPC metódu" placeholder="Hľadať metódu, napr. GetStockCard…" autocomplete="off" spellcheck="false" @bind="Filter" @bind:event="oninput" /><select name="rpc-category" aria-label="Kategória RPC" @bind="SelectedCategory"><option value="">Všetky kategórie</option>@foreach (var c in Categories) { <option value="@c">@c</option> }</select></div>
+<div class="method-grid"><section class="panel method-list" aria-label="Zoznam RPC metód"><div class="section-title">RPC metódy <span>@VisibleMethods.Count z @Methods.Count</span></div>
+@foreach (var method in VisibleMethods) { <button class="method-row @(Selected?.Name == method.Name ? "active" : "")" data-risk="@method.Risk" aria-pressed="@(Selected?.Name == method.Name ? "true" : "false")" @onclick="() => Select(method)" disabled="@Busy"><span class="method-icon" aria-hidden="true">↗</span><span><strong translate="no">@method.Name</strong><small class="signature" translate="no">@method.RequestType → @method.ResponseType</small><small class="method-meta"><span class="method-category">@method.Category</span><span>@RiskLabel(method.Risk)</span></small></span></button> }
+@if (VisibleMethods.Count == 0) { <div class="empty" role="status"><h2>Žiadna zodpovedajúca metóda</h2><p>Skontrolujte hľadaný názov alebo zvolenú kategóriu.</p></div> }
+</section><section class="panel detail">
+@if (Selected is null) { <div class="empty"><div class="empty-icon" aria-hidden="true">⌘</div><h2>Vyberte RPC metódu</h2><p>Zo zoznamu vyberte metódu a pripravte jej protobuf požiadavku.</p></div> }
+else { <div class="detail-head"><div><div class="eyebrow">@Selected.Category / unary RPC</div><h2 translate="no">@Selected.Name</h2></div><span class="badge" data-risk="@Selected.Risk">@RiskLabel(Selected.Risk)</span></div>
+<p class="rpc-description">@Selected.Description</p>
+@foreach (var note in Selected.ImportantNotes) { <p class="hint">@note</p> }
+
+<div class="type-line"><span>Požiadavka</span><code translate="no">@Selected.RequestType</code><span>Odpoveď</span><code translate="no">@Selected.ResponseType</code></div>
+
+<p class="hint">Zdroj: lokálny proto kontrakt. Vzor obsahuje typové predvolené hodnoty, nie overené identifikátory z databázy. Prázdny výsledok nie je dôkaz funkčnosti obchodnej operácie.</p>
+<details open><summary>Vstupný formulár a popisy polí</summary><RequestFields Fields="Selected.Fields" Json="@RequestJson" JsonChanged="SetRequest" Disabled="Busy" /></details>
+<details><summary>Schéma vnorených správ a odpovede</summary><CodePanel><pre class="schema">@DescribeMessages(Selected.Name)</pre></CodePanel></details>
+<label class="input-label" for="request-json">Request JSON <span>Zdieľaný s formulárom</span></label><CodePanel><textarea id="request-json" name="request-json" autocomplete="off" translate="no" value="@RequestJson" data-rpc="@Selected.Name" @onchange="e => SetRequest(e.Value?.ToString() ?? string.Empty)" spellcheck="false" disabled="@Busy"></textarea></CodePanel>
+@if (NeedsConfirmation(Selected.Risk)) { <label class="mutation-warning"><input type="checkbox" @bind="Confirmed" disabled="@Busy" /> Potvrdzujem vedomé vykonanie: @RiskLabel(Selected.Risk). Operácia môže meniť dáta, reláciu alebo externé zariadenie.</label> }
+<div class="actions"><button class="run" @onclick="Run" disabled="@(Busy || (NeedsConfirmation(Selected.Risk) && !Confirmed))">@(Busy ? "Volám…" : "Zavolať RPC")</button><button class="secondary" @onclick="ResetJson" disabled="@Busy">Obnoviť vzor</button><button class="secondary" @onclick="ValidateJson" disabled="@Busy">Overiť JSON</button></div>
+@if (!string.IsNullOrEmpty(Validation)) { <p class="validation" role="status">@Validation</p> }
+@if (!string.IsNullOrEmpty(Error)) { <div class="error" role="alert"><strong>Volanie zlyhalo</strong><CodePanel><pre>@Error</pre></CodePanel></div> }
+@if (!string.IsNullOrEmpty(ResponseJson)) { <div class="response-title"><span>Odpoveď</span><span>JSON</span></div><CodePanel><pre class="response" role="status" aria-live="polite" translate="no">@ResponseJson</pre></CodePanel> }
+}</section></div>
+}
+else
+{
+<div class="toolbar panel"><select name="procedure-backend" aria-label="Backend procedúr" @bind="Backend" @bind:after="ClearProcedure" disabled="@Busy"><option value="G1">G1 · SOAP</option><option value="G2">G2 · REST</option><option value="CRG2">CR-G2 · pokladňa</option></select><input class="search" name="procedure-search" aria-label="Hľadať obchodnú procedúru" autocomplete="off" spellcheck="false" placeholder="Hľadať procedúru alebo rozhranie…" @bind="ProcedureFilter" @bind:event="oninput" /><button class="secondary" @onclick="LoadCatalog" disabled="@Busy">@(Busy ? "Načítavam…" : "Načítať katalóg zo servera")</button></div>
+<p class="config-note">Katalógy sa načítajú na vyžiadanie. Tento krok nespúšťa obchodné operácie. Zdroj musí zodpovedať zvolenému serveru; zmena pripojenia zruší načítané katalógy.</p>
+
+@if (CurrentCatalog is not null)
+{
+    <p class="config-note">Zdroj: @CurrentCatalog.Source · načítané @CurrentCatalog.Items.Count / deklarované @CurrentCatalog.Total</p>
+    @if (!string.IsNullOrEmpty(CurrentCatalog.Error)) { <p class="catalog-error" role="alert">@CurrentCatalog.Error</p> }
+}
+<div class="method-grid"><section class="panel method-list" aria-label="Zoznam obchodných procedúr"><div class="section-title">@Backend procedúry <span>@VisibleProcedures.Count viditeľných</span></div>
+@foreach (var item in VisibleProcedures)
+{
+    <button class="method-row @(Procedure?.InvocationName == item.InvocationName ? "active" : "")" data-risk="@item.ProcedureClass" aria-pressed="@(Procedure?.InvocationName == item.InvocationName ? "true" : "false")" @onclick="() => SelectProcedure(item)" disabled="@Busy"><span class="method-icon" aria-hidden="true">↗</span><span><strong translate="no">@item.InvocationName</strong><small>@RiskLabel(item.ProcedureClass) · @(item.GenericCallable ? "volateľná" : "vlastní gateway")</small></span></button>
+}
+@if (VisibleProcedures.Count == 0) { <p class="hint">Nie je načítaný overený zoznam. Použite načítanie katalógu; názvy procedúr sa neodvodzujú z RPC názvov.</p> }
+</section><section class="panel detail">
+@if (Procedure is not null)
+{
+    <div class="detail-head"><h2 translate="no">@Procedure.InvocationName</h2><span class="badge">@Backend</span></div>
+    <p class="rpc-description">@Procedure.Description</p>
+    <dl class="procedure-metadata"><dt>RPC obálka</dt><dd>@Procedure.RpcName</dd><dt>Trieda</dt><dd>@RiskLabel(Procedure.ProcedureClass)</dd><dt>Backend HTTP</dt><dd>@Procedure.HttpMethod @Procedure.UriTemplate</dd><dt>Parametre podľa katalógu</dt><dd>@(string.IsNullOrEmpty(Procedure.Arguments) ? "Katalóg neuvádza parametre; nie je to dôkaz bezparametrickosti." : Procedure.Arguments)</dd><dt>Návratový typ</dt><dd>@(string.IsNullOrEmpty(Procedure.ReturnType) ? "Katalóg neuvádza." : Procedure.ReturnType)</dd></dl>
+    @if (!Procedure.GenericCallable) { <p class="mutation-warning">Procedúru vlastní správa relácií gateway. Priame generické volanie je zakázané; použite zodpovedajúce autentifikačné RPC.</p> }
+    @if (!Procedure.HasPayloadSchema) { <p class="hint">Katalóg neposkytuje schému payloadu. Vyplňte JSON podľa dokumentácie backendu; klient overí iba JSON objekt, nie obchodné parametre.</p> }
+    else { <p class="hint">Formulár vychádza z príkladu katalógu. Príklad nie je úplná DTO schéma ani overený databázový fixture.</p><RequestFields Fields="PayloadFields" Json="@PayloadJson" JsonChanged="SetPayload" Disabled="Busy" /> }
+}
+else if (Backend == "G2" || CurrentCatalog?.Error is not null)
+{
+    <h2>Manuálne volanie @Backend</h2><p class="hint">Bez overeného katalógu sa mená ani parametre nedajú doplniť automaticky. Zadajte presný názov z dokumentácie backendu. Trieda operácie je neznáma; vyžaduje potvrdenie.</p><label class="input-label" for="manual-procedure">Presný názov procedúry</label><input id="manual-procedure" name="procedure-name" class="manual-procedure" autocomplete="off" spellcheck="false" @bind="ManualName" @bind:after="ClearConfirmation" disabled="@Busy" />
+}
+else { <h2>Vyberte obchodnú procedúru</h2><p class="hint">Najskôr načítajte katalóg zo servera.</p> }
+@if (Procedure is not null || Backend == "G2" || CurrentCatalog?.Error is not null)
+{
+    <label class="input-label" for="payload-json">Payload JSON <span>Objekt parametrov, nie gRPC obálka</span></label><CodePanel><textarea id="payload-json" name="payload-json" autocomplete="off" translate="no" value="@PayloadJson" @onchange="e => SetPayload(e.Value?.ToString() ?? string.Empty)" spellcheck="false" disabled="@Busy"></textarea></CodePanel>
+    <details><summary>Presná protobuf JSON obálka</summary><CodePanel><pre>@ProcedureRequestPreview</pre></CodePanel></details>
+    @if (NeedsConfirmation(Procedure?.ProcedureClass ?? "Unknown")) { <label class="mutation-warning"><input type="checkbox" @bind="Confirmed" disabled="@Busy" /> Potvrdzujem vykonanie @RiskLabel(Procedure?.ProcedureClass ?? "Unknown"). Môže meniť obchodné dáta alebo zariadenia.</label> }
+    <div class="actions"><button class="run" @onclick="RunProcedure" disabled="@(Busy || Procedure is { GenericCallable: false } || (NeedsConfirmation(Procedure?.ProcedureClass ?? "Unknown") && !Confirmed))">@(Busy ? "Volám…" : "Zavolať procedúru")</button></div>
+}
+@if (!string.IsNullOrEmpty(Error)) { <div class="error" role="alert"><strong>Volanie zlyhalo</strong><CodePanel><pre>@Error</pre></CodePanel></div> }
+@if (!string.IsNullOrEmpty(ResponseJson)) { <p class="hint">Transport: odpoveď prijatá. Aplikačný úspech posudzujte podľa result/success a errNumber; dáta samostatne podľa obsahu.</p><CodePanel><pre class="response" role="status" aria-live="polite" translate="no">@ResponseJson</pre></CodePanel> }
+</section></div>
+}
+@code {
+    private List<RpcDocumentation> Methods = [];
+    private RpcDocumentation? Selected;
+    private string Host = "192.168.16.169";
+    private int Port = 21008;
+    private string Username = "";
+    private string Password = "";
+    private string Filter = "";
+    private string SelectedCategory = "";
+    private string RequestJson = "{}";
+    private string ResponseJson = "";
+    private string Error = "";
+    private bool Busy;
+    private string Validation = "";
+    private bool Confirmed;
+    private string View = "rpc";
+    private string Backend = "G1";
+    private string ProcedureFilter = "";
+    private string PayloadJson = "{}";
+    private string ManualName = "";
+    private ProcedureItem? Procedure;
+    private readonly Dictionary<string, ProcedureCatalogResult> Catalogs = [];
+    private ProcedureCatalogResult? CurrentCatalog => Catalogs.GetValueOrDefault(Backend);
+    private List<ProcedureItem> VisibleProcedures => CurrentCatalog?.Items.Where(x => string.IsNullOrEmpty(ProcedureFilter) || (x.InvocationName + " " + x.Description).Contains(ProcedureFilter, StringComparison.OrdinalIgnoreCase)).ToList() ?? [];
+    private List<string> Categories => Methods.Select(x => x.Category).Distinct().Order().ToList();
+    private List<RpcDocumentation> VisibleMethods => Methods.Where(x => (string.IsNullOrEmpty(Filter) || (x.Name + " " + x.Description).Contains(Filter, StringComparison.OrdinalIgnoreCase)) && (string.IsNullOrEmpty(SelectedCategory) || x.Category == SelectedCategory)).ToList();
+    protected override void OnInitialized()
+    {
+        Methods = Schemas.Endpoints.ToList();
+        Host = Configuration["Oberon:Host"] ?? Host;
+        Port = int.TryParse(Configuration["Oberon:Port"], out var port) ? port : Port;
+        Select(Schemas.Get("Ping"));
+    }
+    private static bool NeedsConfirmation(string risk) => !risk.Equals("Read", StringComparison.OrdinalIgnoreCase);
+    private static string RiskLabel(string risk) => risk.ToLowerInvariant() switch { "read" => "Čítanie", "write" => "Zápis", "destructive" => "Deštruktívna operácia", "session" or "sessioncontrol" => "Správa relácie", _ => "Neznámy účinok" };
+    private void ClearConfirmation() => Confirmed = false;
+    private void ClearResult() { Error = ResponseJson = Validation = ""; Confirmed = false; }
+    private void ShowRpc() { View = "rpc"; ClearResult(); }
+    private void ShowProcedures() { View = "procedures"; ClearResult(); }
+    private void ConnectionChanged() { Catalogs.Clear(); ClearProcedure(); }
+    private void ClearProcedure() { Procedure = null; ManualName = ""; PayloadJson = "{}"; ClearResult(); }
+    private void Select(RpcDocumentation method) { Selected = method; RequestJson = Schemas.CreateTemplate(method.Name); ClearResult(); }
+    private void ResetJson() { if (Selected is not null) SetRequest(Schemas.CreateTemplate(Selected.Name)); }
+    private void SetRequest(string json) { RequestJson = json; ClearResult(); }
+    private void SetPayload(string json) { PayloadJson = json; ClearResult(); }
+    private void ValidateJson()
+    {
+        try { if (Selected is not null) Schemas.Validate(Selected.Name, RequestJson); Error = ""; Validation = "PASS: JSON zodpovedá protobuf typom. Obchodné identifikátory ani dostupnosť backendu tým nie sú overené."; }
+        catch (Exception ex) { Validation = ""; Error = ex.GetBaseException().Message; }
+    }
+    private async Task Run()
+    {
+        if (Selected is null || (NeedsConfirmation(Selected.Risk) && !Confirmed)) return;
+        try { Schemas.Validate(Selected.Name, RequestJson); }
+        catch (Exception ex) { Error = ex.GetBaseException().Message; return; }
+        await Execute(Selected.Name, RequestJson);
+    }
+    private async Task Execute(string rpc, string json)
+    {
+        Busy = true; Error = ResponseJson = Validation = "";
+        try { ResponseJson = Pretty(await Explorer.InvokeAsync(rpc, json, Username, Password, Host, Port)); }
+        catch (Exception ex) { Error = ex.GetBaseException().Message; }
+        finally { Password = ""; Busy = false; Confirmed = false; }
+    }
+    private async Task LoadCatalog()
+    {
+        Busy = true; ClearProcedure();
+        try { Catalogs[Backend] = await Catalog.LoadAsync(Backend, Host, Port, username: Username, password: Password); }
+        catch (Exception ex) { Error = ex.GetBaseException().Message; }
+        finally { Password = ""; Busy = false; }
+    }
+    private void SelectProcedure(ProcedureItem item)
+    {
+        Procedure = item;
+        PayloadJson = string.IsNullOrWhiteSpace(item.ExampleJson) ? "{}" : item.ExampleJson;
+        ClearResult();
+    }
+    private ProcedureItem EffectiveProcedure
+    {
+        get
+        {
+            if (Procedure is not null) return Procedure;
+            var name = ManualName;
+            if (Backend == "G1" && (name.StartsWith("IOBERONCashRegisterService.", StringComparison.Ordinal) || name.StartsWith("IOBERONLoyaltySystemService.", StringComparison.Ordinal)))
+                name = name[(name.IndexOf('.') + 1)..];
+            return new(Backend, name, ManualName, Backend switch { "G1" => "CallG1Procedure", "CRG2" => "CallCRG2Procedure", _ => "CallG2Procedure" }, "Manuálna procedúra bez overeného katalógu.", "Unknown", "", "", "", "", "{}", true, false);
+        }
+    }
+    private string ProcedureRequestPreview
+    {
+        get { try { return Pretty(ProcedureCatalog.CreateRequest(EffectiveProcedure, PayloadJson)); } catch (Exception ex) { return ex.GetBaseException().Message; } }
+    }
+    private async Task RunProcedure()
+    {
+        var item = EffectiveProcedure;
+        if (!item.GenericCallable || (NeedsConfirmation(item.ProcedureClass) && !Confirmed)) return;
+        try
+        {
+            if (string.IsNullOrWhiteSpace(item.InvocationName)) throw new ArgumentException("Zadajte presný názov procedúry.");
+            var json = ProcedureCatalog.CreateRequest(item, PayloadJson);
+            Schemas.Validate(item.RpcName, json);
+            await Execute(item.RpcName, json);
+        }
+        catch (Exception ex) { Error = ex.GetBaseException().Message; }
+    }
+    private IReadOnlyList<RpcFieldDocumentation> PayloadFields
+    {
+        get
+        {
+            try
+            {
+                var example = JsonNode.Parse(Procedure?.ExampleJson ?? "{}") as JsonObject;
+                return example?.Select(x => new RpcFieldDocumentation(x.Key, x.Key, PayloadType(x.Value), "Parameter z príkladu serverového katalógu. Presný typ a vnorené členy overuje backend; príklad nenahrádza úplnú DTO schému.", x.Value is JsonArray, false, true, Array.Empty<string>())).ToArray() ?? [];
+            }
+            catch (JsonException) { return []; }
+        }
+    }
+    private static string PayloadType(JsonNode? node) => node is JsonObject ? "message" : node is JsonArray ? "message" : node?.GetValueKind() switch { JsonValueKind.True or JsonValueKind.False => "bool", JsonValueKind.Number => "number", _ => "string" };
+    private static string Pretty(string json) { using var doc = JsonDocument.Parse(json); return JsonSerializer.Serialize(doc.RootElement, new JsonSerializerOptions { WriteIndented = true }); }
+    private string DescribeMessages(string rpc)
+    {
+        var method = OBERONServiceGRPC.Descriptor.Methods.Single(x => x.Name == rpc);
+        var builder = new System.Text.StringBuilder();
+        var visited = new HashSet<string>();
+        void Add(Google.Protobuf.Reflection.MessageDescriptor descriptor)
+        {
+            if (!visited.Add(descriptor.FullName)) return;
+            builder.AppendLine(descriptor.Name + " {");
+            foreach (var field in descriptor.Fields.InFieldNumberOrder())
+            {
+                var type = field.FieldType == Google.Protobuf.Reflection.FieldType.Message ? field.MessageType.Name : field.FieldType == Google.Protobuf.Reflection.FieldType.Enum ? field.EnumType.Name : field.FieldType.ToString();
+                builder.AppendLine($"  {field.JsonName}: {type}{(field.IsRepeated ? "[]" : "")}{(field.HasPresence ? " (presence)" : "")}");
+                var explanation = Schemas.FieldInsight(rpc, descriptor.Name, field.JsonName);
+                if (!string.IsNullOrEmpty(explanation)) builder.AppendLine("    " + explanation);
+                if (field.FieldType == Google.Protobuf.Reflection.FieldType.Enum) builder.AppendLine("    " + string.Join(" | ", field.EnumType.Values.Select(x => x.Name)));
+            }
+            builder.AppendLine("}\n");
+            foreach (var field in descriptor.Fields.InFieldNumberOrder().Where(x => x.FieldType == Google.Protobuf.Reflection.FieldType.Message)) Add(field.MessageType);
+        }
+        Add(method.InputType); Add(method.OutputType);
+        return builder.ToString();
+    }
+}

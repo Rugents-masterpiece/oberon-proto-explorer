@@ -1,0 +1,57 @@
+@page "/how-to/{Language}"
+@inject ClientGuideCatalog Guides
+
+<PageTitle>@(Guide is null ? "Klientske návody" : $"{Guide.Name} · OBERON klient")</PageTitle>
+<article class="client-guide">
+    <a class="guide-back" href="/">← Späť na RPC pracovnú plochu</a>
+    @if (Guide is null)
+    {
+        <h1>Návod sa nenašiel</h1>
+        <p>Vyberte jeden z podporovaných jazykov.</p>
+        <HowToRun />
+    }
+    else
+    {
+        <header class="guide-heading">
+            <div><p class="eyebrow">OBERON ServiceGateway · Klientsky štart</p><h1>How to run it? · @Guide.Name</h1><p>@Guide.Intro</p></div>
+            <span class="protocol-tag">Native gRPC / HTTP/2</span>
+        </header>
+        <nav class="guide-languages" aria-label="Ďalšie jazyky">
+            @foreach (var language in ClientGuideCatalog.Languages)
+            {
+                <a href="@($"/how-to/{language.Slug}")" aria-current="@(language.Slug == Language ? "page" : null)">@language.Name</a>
+            }
+        </nav>
+        <section class="guide-downloads" aria-labelledby="downloads-title">
+            <h2 id="downloads-title">Pripravené na stiahnutie</h2>
+            <p>ZIP obsahuje klientsky príklad, závislosti, README a nezmenený proto kontrakt. Neobsahuje heslá ani obchodné dáta.</p>
+            <div class="guide-links"><a class="guide-download" href="@($"/downloads/oberon-{Guide.Slug}.zip")" download>Stiahnuť štartovací ZIP</a><a href="/downloads/oberon_service_grpc.proto" download>Stiahnuť iba proto</a></div>
+        </section>
+        <section class="guide-prerequisites" aria-labelledby="prerequisites-title">
+            <h2 id="prerequisites-title">Čo potrebujete</h2><p>@Guide.Prerequisites</p>
+            <p>Rozbaľte ZIP do vlastného priečinka. Príkazy spúšťajte z jeho koreňa; zobrazené shell príkazy sú pre Linux/macOS alebo WSL. Adresa <code>192.168.16.169:21008</code> je gRPC gateway, nie port tohto webu.</p>
+        </section>
+        <ol class="guide-steps">
+            @foreach (var step in Guide.Steps)
+            {
+                <li><h2>@step.Title</h2><p>@step.Text</p>@if (!string.IsNullOrWhiteSpace(step.Command)) { <CodePanel><pre tabindex="0" aria-label="Príkazy: @step.Title"><code>@step.Command</code></pre></CodePanel> }</li>
+            }
+        </ol>
+        <section class="guide-source" aria-labelledby="example-title">
+            <h2 id="example-title">Klientsky príklad</h2><p><code>@Guide.ExampleFile</code> — rovnaký zdrojový kód ako v ZIP balíku.</p>
+            <CodePanel><pre class="guide-example" tabindex="0" aria-label="Zdrojový kód klienta"><code>@Guide.Example</code></pre></CodePanel>
+        </section>
+        <ProtoGuide Language="@Guide.Slug" LanguageName="@Guide.Name" />
+        <aside class="guide-notes" aria-labelledby="notes-title">
+            <h2 id="notes-title">Ďalšie volania a bezpečnosť</h2>
+            <ul>@foreach (var note in Guide.Notes) { <li>@note</li> }</ul>
+            <p>Úspešný Ping overuje transport, nie oprávnenia ani všetky obchodné operácie. Pri chybách skontrolujte host, gRPC port, firewall a režim TLS; UNAUTHENTICATED pri chránenom RPC znamená chýbajúcu alebo neplatnú reláciu.</p>
+        </aside>
+    }
+</article>
+
+@code {
+    [Parameter] public string Language { get; set; } = "";
+    private ClientGuide? Guide;
+    protected override async Task OnParametersSetAsync() => Guide = await Guides.GetAsync(Language);
+}

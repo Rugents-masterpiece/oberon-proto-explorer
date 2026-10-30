@@ -1,0 +1,38 @@
+{
+  "slug": "csharp",
+  "name": "C#",
+  "intro": "Samostatný C# klient pre bezpečný test dostupnosti OBERON ServiceGateway pomocou jediného RPC Ping.",
+  "prerequisites": ".NET SDK 10 (cieľ net10.0), prístup k NuGet a k serveru cez dôveryhodnú LAN.",
+  "steps": [
+    {
+      "title": "Obnova závislostí",
+      "text": "Príkaz spustite v koreňovom priečinku rozbaleného balíka.",
+      "command": "dotnet restore PingClient.csproj"
+    },
+    {
+      "title": "Generovanie a zostavenie",
+      "text": "Grpc.Tools počas zostavenia spracuje proto/oberon_service_grpc.proto. Kód vznikne v obj/, namespace je Exa.OBERON.ServiceGateway.Contracts.",
+      "command": "dotnet build PingClient.csproj --no-restore"
+    },
+    {
+      "title": "Offline testy",
+      "text": "Režim --self-test nekontaktuje server a nevytvorí kanál.",
+      "command": "dotnet run --project PingClient.csproj --no-build -- --self-test"
+    },
+    {
+      "title": "Ping",
+      "text": "Očakávaná úspešná odpoveď má tvar Ping -> pong. Ide o vysvetlenie, nie o záznam aktuálneho behu.",
+      "command": "dotnet run --project PingClient.csproj --no-build -- --host 192.168.16.169 --port 21008"
+    }
+  ],
+  "exampleFile": "Program.cs",
+  "notes": [
+    "Ide o natívne gRPC cez HTTP/2. Tento klient nie je určený pre prehliadač; prehliadač potrebuje gRPC-Web a kompatibilný server alebo proxy.",
+    "Ukážka používa nešifrované spojenie (plaintext), iba v dôveryhodnej LAN. Mimo nej nakonfigurujte TLS a overovanie certifikátu.",
+    "Ping nevyžaduje prihlásenie. Klient posiela iba Ping, má deadline 10 sekúnd a po skončení zatvorí kanál.",
+    "Pri budúcom rozšírení autentifikácie zavolajte GetLoginSalts s username. Pre dostupné backendy vypočítajte SHA1(salt + password) z bajtov Windows-1250 (cp1250), ako hexadecimálny reťazec. Do LoginUser vložte gen1PasswordHash, gen2PasswordHash a prípadne cashRegisterGen2PasswordHash podľa príslušných saltov. Skontrolujte result; sessionId odošlite v metadata s kľúčom userdata. Tajomstvá a sessionId nelogujte. Táto ukážka autentifikáciu nevykonáva.",
+    "Host zadávajte ako DNS názov alebo IPv4 adresu bez http:// a bez portu; port je samostatné --port číslo 1 až 65535. Predvolené hodnoty sú 192.168.16.169 a 21008.",
+    "Pri opakovanom testovaní ponechajte medzi volaniami aspoň 5 sekúnd. Úspešný Ping neoveruje autentifikáciu ani obchodné operácie."
+  ],
+  "example": "using Exa.OBERON.ServiceGateway.Contracts;\nusing Grpc.Core;\nusing Grpc.Net.Client;\n\ninternal static class Program\n{\n    private static async Task<int> Main(string[] args)\n    {\n        try\n        {\n            if (args.Length == 2 && args[0] == \"--export-inventory\")\n            {\n                Inventory.Export(args[1]); // Offline; no channel or server calls.\n                return 0;\n            }\n            if (args.SequenceEqual(new[] { \"--self-test\" }))\n            {\n                SelfTests.Run(); // No channel and no server calls.\n                return 0;\n            }\n            var options = ClientOptions.Parse(args);\n            using var channel = GrpcChannel.ForAddress($\"http://{options.Host}:{options.Port}\");\n            var client = new OBERONServiceGRPC.OBERONServiceGRPCClient(channel);\n            using var call = client.PingAsync(new PingRequest { Message = \"hello\" },\n                deadline: DateTime.UtcNow.AddSeconds(10));\n            var response = await call.ResponseAsync;\n            Console.WriteLine($\"Ping -> {response.Message}\");\n            return 0;\n        }\n        catch (ArgumentException error)\n        {\n            Console.Error.WriteLine($\"Arguments: {error.Message}\");\n            Console.Error.WriteLine(\"Usage: dotnet run -- [--host DNS-or-IPv4] [--port 1..65535]\");\n            return 2;\n        }\n        catch (RpcException error)\n        {\n            Console.Error.WriteLine($\"gRPC error: {error.StatusCode}: {error.Status.Detail}\");\n            return 1;\n        }\n    }\n}\n"
+}

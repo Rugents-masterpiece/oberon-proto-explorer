@@ -1,0 +1,14 @@
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.swp
+*.swo
+*~
+.DS_Store
+*.log
+*.tmp
+*.temp

@@ -1,0 +1,68 @@
+<section class="proto-guide guide-downloads" aria-labelledby="proto-guide-title">
+    <h2 id="proto-guide-title">Ako čítať proto a extrahovať procedúry</h2>
+    <p><code>.proto</code> je kontrakt, nie program ani zoznam dát zo servera. Definuje služby, RPC metódy, vstupné a výstupné správy a ich polia. Z rovnakého kontraktu môžete generovať klientov alebo vytvoriť offline katalóg bez prihlasovania a bez volania servera.</p>
+    <h3>1. RPC, správy a atribúty</h3>
+    <CodePanel><pre tabindex="0" aria-label="Príklad kontraktu Ping"><code>@ContractExample</code></pre></CodePanel>
+    <p><code>service</code> združuje metódy. <code>rpc Ping</code> prijíma <code>PingRequest</code> a vracia <code>PingResponse</code>. Cesta volania je <code>/oberon.servicegateway.OBERONServiceGRPC/Ping</code>. <code>message</code> opisuje dátový typ, nie ďalšiu procedúru.</p>
+    <ul>
+        <li><code>string message = 1</code>: názov atribútu je <code>message</code>, typ je <code>string</code> a číslo <code>1</code> je identifikátor poľa na binárnom protokole, nie jeho hodnota. Pri evolúcii kontraktu čísla existujúcich polí nemeňte ani znovu nepoužívajte.</li>
+        <li><code>repeated</code> znamená zoznam; <code>map</code> slovník; <code>oneof</code> alternatívy, z ktorých je naraz nastavená najviac jedna. Vlastný typ poľa nájdete medzi ďalšími správami, hodnoty <code>enum</code> medzi enumeráciami.</li>
+        <li>Bežné skalárne polia proto3 majú predvolenú hodnotu (<code>""</code>, <code>0</code>, <code>false</code>); nie sú tým automaticky obchodne povinné ani platné. <code>optional</code>, správy a <code>oneof</code> umožňujú sledovať prítomnosť. Validáciu a oprávnenia treba doplniť podľa serverovej dokumentácie.</li>
+        <li>Protobuf JSON môže mať iný názov než proto: <code>json_payload</code> → <code>jsonPayload</code>. Toto pole je <strong>string obsahujúci JSON</strong>, nie vnorený objekt. Veľké <code>int64</code> zachovajte bez straty presnosti; Protobuf JSON ich reprezentuje reťazcami.</li>
+    </ul>
+    <h3>2. Strojové čítanie: descriptor namiesto regulárneho výrazu</h3>
+    <p>@ExportHint</p>
+    <p>Príkazy spúšťajte z koreňa rozbaleného štartovacieho ZIPu. Export je výlučne offline; nepotrebuje server ani prihlasovacie údaje.</p>
+    <CodePanel><pre tabindex="0" aria-label="Vytvorenie descriptoru a JSON katalógu"><code>@ExportCommands</code></pre></CodePanel>
+    <div class="guide-links">
+        <a href="@ExportDownload" download>Stiahnuť exportér atribútov</a>
+        <a href="/downloads/rpc-inventory.json" download>Stiahnuť hotový RPC katalóg JSON</a>
+        <a href="/downloads/oberon-descriptor.pb" download>Stiahnuť descriptor s komentármi</a>
+    </div>
+    <p>Výsledný <code>rpc-inventory.json</code> obsahuje <code>services[].methods[]</code> (názov, cesta, input, output, streaming), <code>messages</code> (polia s názvom, JSON názvom, číslom, typom, cardinality, proto3_optional, oneof) a <code>enums</code>. Pri poli odkazujúcom na vlastný typ otvorte jeho položku v <code>messages</code>; <code>map_entry</code> označuje generovaný typ položky mapy. Nie je nutné rekurzívne rozbaľovať typy donekonečna.</p>
+    <p>Natívne exportéry C#, Java a Go čítajú generované descriptory; Node.js parsuje kontrakt pomocou protobufjs. Tieto štyri exportéry neexportujú zdrojové komentáre. Hotový JSON a descriptor na stiahnutie majú komentáre zachované pri kompilácii s <code>--include_source_info</code>; používanie týchto súborov nevyžaduje ďalší jazykový runtime.</p>
+    <h3>3. Descriptory v @LanguageName</h3>
+    <p>@ReflectionHint</p>
+    <h3>4. RPC kontrakt nie je obchodný katalóg G1 / G2</h3>
+    <p>Tento proto deklaruje 103 transportných RPC. <code>CallG1Procedure</code>, <code>CallG2Procedure</code> a <code>CallCRG2Procedure</code> sú generické obálky. Z ich atribútov <code>procedure</code> a <code>json_payload</code> sa nedajú odvodiť všetky názvy obchodných procedúr ani schéma ich vnútorného JSON.</p>
+    <ul>
+        <li><code>ListG1Procedures</code> vracia serverový katalóg: <code>name</code>, <code>interface_name</code>, <code>args</code>, <code>returns</code>, <code>procedure_class</code>, <code>http_method</code>, <code>uri_template</code>, <code>generic_callable</code> a <code>example_json</code>. Nefiltrovaný vstup je <code>{}</code>; skontrolujte <code>result</code>, <code>total</code> a <code>procedures</code>. Deklarovaný <code>args</code> nie je úplná schéma vnorených DTO; nulový príklad nie je platná obchodná fixture.</li>
+        <li><code>ListCRG2Procedures</code> vracia <code>name</code>, <code>http_method</code>, <code>uri_template</code>, <code>procedure_class</code> a <code>generic_callable</code>. Táto odpoveď neobsahuje zoznam atribútov tela ani jeho úplnú DTO schému.</li>
+        <li><code>ListG2Procedures</code> v tomto proto neexistuje. Hoci existuje <code>CallG2Procedure</code>, G2 názvy a parametre potrebujete zo samostatného autoritatívneho katalógu alebo dokumentácie servera. Nevymýšľajte ich podľa názvov RPC.</li>
+    </ul>
+    <p>Na serverové katalógy použite overenú reláciu a metadata <code>userdata</code> podľa návodu nižšie. Offline exportér server nekontaktuje. Prítomnosť metódy v proto ani údaj <code>generic_callable</code> nedokazuje oprávnenie, pripravenosť backendu alebo bezpečnosť zápisu. Mutujúce procedúry nevolajte pri skúmaní kontraktu.</p>
+</section>
+
+@code {
+    [Parameter] public string Language { get; set; } = "";
+    [Parameter] public string LanguageName { get; set; } = "";
+    private const string ContractExample = "service OBERONServiceGRPC {\n  rpc Ping(PingRequest) returns (PingResponse);\n}\nmessage PingRequest {\n  string message = 1;\n}\nmessage PingResponse {\n  string message = 1;\n}";
+    private string ExportDownload => Language == "python" ? "/downloads/export_proto_inventory.py" : $"/downloads/oberon-{Language}.zip";
+    private string ExportHint => Language switch
+    {
+        "python" => "Použite grpc_tools.protoc a stiahnutý export_proto_inventory.py. Exportér uložte vedľa client.py. Descriptor set zachová importy aj komentáre; kód klienta netreba spúšťať.",
+        "csharp" => "Stačí .NET SDK a NuGet závislosti v PingClient.csproj. Grpc.Tools vygeneruje kontrakt pri zostavení. Súbor Inventory.cs v ZIPe využíva Google.Protobuf.Reflection a System.Text.Json; prepínač --export-inventory exportuje schému namiesto volania Ping.",
+        "javascript" => "Stačí Node.js a npm. inventory.js je súčasť ZIPu a používa priamo deklarovanú závislosť protobufjs na parsovanie pôvodného proto s keepCase. Výsledok vypíše ako JSON; kód klienta ani gRPC kanál sa nespúšťajú.",
+        "java" => "Stačí JDK a Maven. Maven projekt stiahne protoc a vygeneruje Java kontrakt pri compile. Trieda example.Inventory v ZIPe použije protobuf-java descriptory a uloží JSON do súboru zadaného argumentom; example.Client sa nespúšťa.",
+        "go" => "Použite Go a protoc s pluginmi podľa kroku generovania klienta. cmd/inventory/main.go v ZIPe číta descriptory balíka pb cez protoreflect a serializuje ich pomocou štandardného encoding/json. Žiadny gRPC klient sa nevytvára.",
+        _ => "Vyberte návod pre váš jazyk."
+    };
+    private string ExportCommands => Language switch
+    {
+        "python" => "python3 -m venv .proto-tools\n.proto-tools/bin/python -m pip install grpcio-tools==1.84.0 protobuf==7.36.2\n.proto-tools/bin/python -m grpc_tools.protoc -I proto --include_imports --include_source_info --descriptor_set_out=contract.pb proto/oberon_service_grpc.proto\n.proto-tools/bin/python export_proto_inventory.py contract.pb > rpc-inventory.json",
+        "csharp" => "dotnet restore\ndotnet run --project PingClient.csproj -- --export-inventory rpc-inventory.json",
+        "javascript" => "npm install\nnode inventory.js > rpc-inventory.json",
+        "java" => "mvn -q compile exec:java -Dexec.mainClass=example.Inventory -Dexec.args=rpc-inventory.json",
+        "go" => "sh generate.sh\ngo run ./cmd/inventory > rpc-inventory.json",
+        _ => ""
+    };
+    private string ReflectionHint => Language switch
+    {
+        "python" => "Po generovaní načítajte oberon_service_grpc_pb2.DESCRIPTOR. Cez services_by_name nájdete OBERONServiceGRPC, cez methods jeho metódy a cez method.input_type.fields / output_type.fields atribúty. Typy správ sú aj v messages_by_name. Komentáre získajte z descriptor setu s include_source_info, nie z bežného runtime descriptoru.",
+        "javascript" => "Ping klient používa @grpc/proto-loader. Natívny exportér inventory.js používa protobufjs Root: služby majú methodsArray, správy fieldsArray a polia id, name, type, resolvedType, repeated a partOf. keepCase zachová názvy z proto. Pri enum a message odkazoch použite resolvedType.fullName. Runtime PackageDefinition klienta nenahrádza úplný export pôvodnej schémy.",
+        "csharp" => "V generovanom namespace Exa.OBERON.ServiceGateway.Contracts má PingRequest.Descriptor typ MessageDescriptor. Jeho Fields.InDeclarationOrder() poskytuje FieldDescriptor (Name, JsonName, FieldNumber, FieldType, MessageType, EnumType, IsRepeated). Kompletný zoznam služieb je v PingRequest.Descriptor.File.Services, metódy v service.Methods a vstup/výstup v method.InputType / OutputType.",
+        "java" => "Vygenerovaná trieda oberon.servicegateway.OberonServiceGrpc.getDescriptor() vracia FileDescriptor. Použite getServices(), getMethods(), getInputType()/getOutputType() a getFields(); FieldDescriptor poskytuje getName(), getJsonName(), getNumber(), getType(), isRepeated() a odkazy na typy. Stub OBERONServiceGRPCGrpc slúži na volanie, nie ako náhrada celého message descriptoru.",
+        "go" => "Po generovaní do pb použite pb.File_oberon_service_grpc_proto (protoreflect.FileDescriptor). Services(), Methods(), Input()/Output() a Fields() poskytujú descriptory; polia majú Name(), JSONName(), Number(), Kind(), Cardinality(), Message() a Enum(). Prejdite zoznamy pomocou Len() a Get(i). Komentáre exportujte zo zdrojového descriptor setu.",
+        _ => "Použite jazykovo nezávislý descriptor set."
+    };
+}

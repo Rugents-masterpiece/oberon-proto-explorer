@@ -1,0 +1,48 @@
+/* Client onboarding shares the workspace palette and typography. */
+.hero { flex-wrap: wrap; }
+.hero-tools { display: flex; align-items: center; gap: var(--s4); min-width: 0; }
+.how-to-run { padding: var(--s2) var(--s3); background: var(--catalog-bg); border: 1px solid var(--catalog-line); border-radius: var(--radius-control); }
+.how-to-run h2 { font-size: 12px; font-weight: 700; margin: 0 0 var(--s2); }
+.how-to-run nav, .guide-languages, .guide-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); }
+.how-to-run a, .guide-languages a { color: var(--blue-700); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-control); padding: var(--s1) var(--s2); font-size: 12px; font-weight: 600; text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; }
+.how-to-run a:hover, .guide-languages a:hover { background: var(--blue-50); border-color: var(--blue-600); }
+.client-guide { max-width: 1040px; margin-inline: auto; padding: var(--s5) var(--page-gutter); }
+.client-guide a { color: var(--blue-700); }
+.guide-back { display: inline-block; margin-bottom: var(--s4); font-size: 13px; }
+.guide-heading { display: flex; justify-content: space-between; align-items: start; gap: var(--s3); }
+.guide-heading > div { min-width: 0; }
+.guide-heading h1 { font-size: 30px; line-height: 1.25; margin: var(--s2) 0 var(--s3); letter-spacing: -.025em; }
+.client-guide p { max-width: 80ch; }
+.guide-languages { margin: var(--s3) 0 var(--s4); }
+.guide-languages a[aria-current=page] { background: var(--blue-100); border-color: var(--blue-600); }
+.guide-downloads { padding: var(--s4); border: 1px solid var(--connection-line); background: var(--connection-bg); border-radius: var(--radius-panel); margin-bottom: var(--s4); }
+.client-guide h2 { font-size: 18px; line-height: 1.4; margin: 0 0 var(--s2); }
+.guide-download { font-weight: 700; }
+.guide-links a { padding-block: var(--s2); }
+.guide-prerequisites { margin-bottom: var(--s5); }
+.guide-steps { padding-left: var(--s4); margin: 0 0 var(--s5); }
+.guide-steps > li { padding-left: var(--s2); margin-bottom: var(--s4); }
+.guide-steps > li::marker { color: var(--blue-700); font-weight: 700; }
+.client-guide pre { background: var(--editor-bg); color: var(--ink); border: 1px solid var(--editor-line); padding: var(--s3); border-radius: var(--radius-control); font: 13px/1.7 var(--font-code); overflow-x: auto; max-width: 100%; }
+.client-guide pre code { color: inherit; }
+.client-guide code { overflow-wrap: anywhere; }
+.guide-source { min-width: 0; margin-bottom: var(--s4); }
+.guide-notes { background: var(--workspace-bg); border: 1px solid var(--workspace-line); padding: var(--s4); border-radius: var(--radius-panel); }
+.guide-notes ul { padding-left: var(--s4); }
+.guide-notes li { margin-bottom: var(--s2); }
+.proto-guide h3 { font-size: 16px; margin: var(--s4) 0 var(--s2); }
+.proto-guide li { margin-bottom: var(--s2); }
+.proto-guide ul { padding-left: var(--s4); }
+.proto-guide p, .proto-guide li { overflow-wrap: anywhere; }
+@media (max-width: 1000px) {
+  .hero-tools { width: 100%; justify-content: space-between; }
+  .hero-tools .hero-meta { flex-direction: row; }
+}
+@media (max-width: 720px) {
+  .hero-tools { flex-wrap: wrap; gap: var(--s3); }
+  .hero-tools .hero-meta { margin-left: 0; }
+  .how-to-run { width: 100%; }
+  .guide-heading { flex-direction: column; }
+  .guide-heading h1 { font-size: 24px; }
+  .guide-downloads, .guide-notes { padding: var(--s3); }
+}

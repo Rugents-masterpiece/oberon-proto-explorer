@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f6fb" />
+    <base href="/" />
+    <ResourcePreloader />
+    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="@Assets["workspace.css"]" />
+    <link rel="stylesheet" href="@Assets["client-guides.css"]" />
+    <link rel="stylesheet" href="@Assets["code-copy.css"]" />
+
+    <link rel="stylesheet" href="@Assets["OberonProtoExplorer.styles.css"]" />
+    <ImportMap />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet />
+</head>
+
+<body>
+    <Routes @rendermode="InteractiveServer" />
+    <ReconnectModal />
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="@Assets["code-copy.js"]"></script>
+</body>
+
+</html>

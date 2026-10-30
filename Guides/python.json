@@ -1,0 +1,43 @@
+{
+  "slug": "python",
+  "name": "Python",
+  "intro": "Samostatný Python klient pre bezpečný test dostupnosti OBERON ServiceGateway pomocou jediného RPC Ping.",
+  "prerequisites": "Python 3.10+ s modulom venv a pip; prístup k serveru cez dôveryhodnú LAN.",
+  "steps": [
+    {
+      "title": "Virtuálne prostredie",
+      "text": "Príkazy spúšťajte v koreňovom priečinku rozbaleného balíka.",
+      "command": "python3 -m venv .venv"
+    },
+    {
+      "title": "Inštalácia závislostí",
+      "text": "Použite pripnuté verzie. Na Windows nahraďte .venv/bin/python za .venv\\Scripts\\python.exe.",
+      "command": ".venv/bin/python -m pip install -r requirements.txt"
+    },
+    {
+      "title": "Generovanie klienta",
+      "text": "Autoritatívny kontrakt je v proto/. Oba generované Python moduly vzniknú priamo v koreňovom priečinku vedľa client.py.",
+      "command": ".venv/bin/python -m grpc_tools.protoc -I proto --python_out=. --grpc_python_out=. proto/oberon_service_grpc.proto"
+    },
+    {
+      "title": "Offline testy",
+      "text": "Testy argumentov nekontaktujú server.",
+      "command": ".venv/bin/python -m unittest -v"
+    },
+    {
+      "title": "Ping",
+      "text": "Očakávaná úspešná odpoveď má tvar Ping -> pong. Je to vysvetlenie očakávaného správania, nie záznam aktuálneho behu.",
+      "command": ".venv/bin/python client.py --host 192.168.16.169 --port 21008"
+    }
+  ],
+  "exampleFile": "client.py",
+  "notes": [
+    "Ide o natívne gRPC cez HTTP/2. Tento klient nie je určený pre prehliadač; prehliadač potrebuje gRPC-Web a kompatibilný server alebo proxy.",
+    "Ukážka používa nešifrované spojenie (plaintext), iba v dôveryhodnej LAN. Mimo nej nakonfigurujte TLS a overovanie certifikátu.",
+    "Ping nevyžaduje prihlásenie. Klient posiela iba Ping, má deadline 10 sekúnd a po skončení zatvorí kanál.",
+    "Pri budúcom rozšírení autentifikácie zavolajte GetLoginSalts s username. Pre dostupné backendy vypočítajte SHA1(salt + password) z bajtov Windows-1250 (cp1250), ako hexadecimálny reťazec. Do LoginUser vložte gen1PasswordHash, gen2PasswordHash a prípadne cashRegisterGen2PasswordHash podľa príslušných saltov. Skontrolujte result; sessionId odošlite v metadata s kľúčom userdata. Tajomstvá a sessionId nelogujte. Táto ukážka autentifikáciu nevykonáva.",
+    "Host zadávajte ako DNS názov alebo IPv4 adresu bez http:// a bez portu; port je samostatné --port číslo 1 až 65535. Predvolené hodnoty sú 192.168.16.169 a 21008.",
+    "Pri opakovanom testovaní ponechajte medzi volaniami aspoň 5 sekúnd. Úspešný Ping neoveruje autentifikáciu ani obchodné operácie."
+  ],
+  "example": "\"\"\"Sessionless OBERON Ping, using generated modules beside this file.\"\"\"\nimport argparse\nimport re\nimport sys\n\n\ndef parse_args(argv=None):\n    parser = argparse.ArgumentParser(description=\"OBERON Ping (10-second deadline)\")\n    parser.add_argument(\"--host\", default=\"192.168.16.169\")\n    parser.add_argument(\"--port\", default=\"21008\")\n    args = parser.parse_args(argv)\n    if not re.fullmatch(r\"[A-Za-z0-9._-]+\", args.host):\n        parser.error(\"host must be a DNS name or IPv4 address, without scheme or port\")\n    if not re.fullmatch(r\"[0-9]+\", args.port) or not 1 <= int(args.port) <= 65535:\n        parser.error(\"port must be an integer from 1 to 65535\")\n    args.port = int(args.port)\n    return args\n\n\ndef main(argv=None):\n    args = parse_args(argv)\n    import grpc\n    import oberon_service_grpc_pb2 as pb\n    import oberon_service_grpc_pb2_grpc as services\n    try:\n        with grpc.insecure_channel(f\"{args.host}:{args.port}\") as channel:\n            client = services.OBERONServiceGRPCStub(channel)\n            response = client.Ping(pb.PingRequest(message=\"hello\"), timeout=10)\n            print(f\"Ping -> {response.message}\")\n        return 0\n    except grpc.RpcError as error:\n        print(f\"gRPC error: {error.code().name}: {error.details()}\", file=sys.stderr)\n        return 1\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n"
+}

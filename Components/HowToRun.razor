@@ -1,0 +1,9 @@
+<section class="how-to-run" aria-labelledby="how-to-title">
+    <h2 id="how-to-title" translate="no">How to run it?</h2>
+    <nav aria-label="Klientske návody">
+        @foreach (var language in ClientGuideCatalog.Languages)
+        {
+            <a href="@($"/how-to/{language.Slug}")" translate="no">@language.Name</a>
+        }
+    </nav>
+</section>

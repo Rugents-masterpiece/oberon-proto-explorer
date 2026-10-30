@@ -1,0 +1,15 @@
+/* Toolbar is a sibling of the scrolling code, never part of its scrollport. */
+.code-panel { position: relative; min-width: 0; max-width: 100%; margin-bottom: var(--s3); background: var(--editor-bg); border: 1px solid var(--editor-line); border-radius: var(--radius-control); }
+.code-copy-toolbar { position: relative; display: flex; align-items: center; justify-content: flex-end; min-height: 44px; padding: 4px 8px; }
+.code-copy-button { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 8px; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-control); }
+.code-copy-button:hover { color: var(--blue-700); background: var(--blue-50); border-color: var(--blue-600); }
+.code-copy-button svg { flex: none; }
+.code-panel > pre, .code-panel > textarea { width: 100%; margin: 0; border: 0; border-radius: 0 0 5px 5px; }
+.code-panel > pre { max-height: min(560px, 60dvh); overflow: auto; }
+.code-panel:has(> .response) { background: var(--teal-50); border-color: #b5dcd2; }
+details .code-panel { margin-bottom: 0; background: #f4f8f3; border: 0; }
+.error .code-panel { background: var(--red-50); border-color: var(--red-line); }
+.code-copy-feedback { position: absolute; top: calc(100% + 4px); right: 8px; z-index: 3; max-width: calc(100% - 16px); width: max-content; padding: 6px 10px; color: var(--teal-700); background: var(--teal-50); border: 1px solid #b5dcd2; border-radius: var(--radius-control); box-shadow: var(--shadow-panel); font: 600 12px/1.5 var(--font-ui); pointer-events: none; }
+.code-copy-feedback:empty { padding: 0; border: 0; box-shadow: none; }
+.code-copy-feedback[data-state=error] { color: var(--red-700); background: var(--red-50); border-color: var(--red-line); }
+@media (pointer: coarse) { .code-copy-button { width: 44px; height: 44px; } }

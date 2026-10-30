@@ -1,0 +1,10 @@
+﻿@inherits LayoutComponentBase
+
+<a class="skip-link" href="#workspace-main" @onclick="FocusWorkspace" @onclick:preventDefault="true">Preskočiť na pracovnú plochu</a>
+<main id="workspace-main" tabindex="-1" @ref="Workspace">@Body</main>
+
+@code {
+    private ElementReference Workspace;
+    private async Task FocusWorkspace() => await Workspace.FocusAsync();
+}
+

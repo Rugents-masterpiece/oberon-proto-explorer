@@ -1,0 +1,36 @@
+{
+  "slug": "go",
+  "name": "Go",
+  "intro": "Samostatný štartovací klient Go pre bezpečný test dostupnosti OBERON ServiceGateway: jedno volanie Ping bez hesla a bez zmien údajov.",
+  "prerequisites": "Potrebujete Go 1.23 alebo novšie, protoc 29.3 a POSIX shell (na Windows napríklad WSL). Generátory sa nainštalujú lokálne do tools/. Potrebujete sieťový prístup na gRPC server a internet pri prvom zostavení. Všetky príkazy spúšťajte z koreňa rozbaleného balíka.",
+  "steps": [
+    {
+      "title": "Overte nástroje",
+      "text": "Potrebujete Go 1.23 alebo novšie, protoc 29.3 a POSIX shell (na Windows napríklad WSL). Generátory sa nainštalujú lokálne do tools/.",
+      "command": "go version\nprotoc --version"
+    },
+    {
+      "title": "Vygenerujte klienta",
+      "text": "Súbor proto/oberon_service_grpc.proto je súčasťou ZIP. Proto nemá go_package, preto generate.sh používa M mapovanie pre oba generátory na example.com/oberon-client/pb. Výsledné zdroje sú v pb/.",
+      "command": "sh generate.sh"
+    },
+    {
+      "title": "Zostavte a spustite offline testy",
+      "text": "Pripnuté verzie sú v go.mod a kontrolné súčty v go.sum. Testy overujú argumenty bez siete.",
+      "command": "go mod download\ngo test -mod=readonly ./...\ngo build -mod=readonly -o oberon-ping ."
+    },
+    {
+      "title": "Zavolajte iba Ping",
+      "text": "Argumenty sú host a port. Bez argumentov sa použije 192.168.16.169:21008. Timeout je 10 sekúnd; spojenie sa vždy zatvorí. Pri opakovaných živých volaniach počkajte aspoň 5 sekúnd.",
+      "command": "./oberon-ping 192.168.16.169 21008"
+    }
+  ],
+  "exampleFile": "main.go",
+  "notes": [
+    "Spojenie je plaintext bez TLS. Používajte iba dôveryhodnú LAN; neposielajte prihlasovacie údaje cez nedôveryhodnú sieť. Ping je bez prihlásenia; úspešný Ping nedokazuje funkčnosť autentifikácie ani podnikových procedúr.",
+    "Toto je natívny serverový gRPC klient cez HTTP/2, nie grpc-web pre prehliadač. Prehliadač potrebuje grpc-web klienta a kompatibilnú bránu/proxy; port 21008 je tu overený pre natívny gRPC.",
+    "Autentifikácia (iba vysvetlenie, tento klient ju nevykonáva): zavolajte GetLoginSalts s používateľským menom, pre každý dostupný backend vypočítajte SHA1 zo spojenia salt + heslo zakódovaného vo Windows-1250 a pošlite hexadecimálny hash do príslušného poľa LoginUser. Overte result; úspešné session_id posielajte v metadátach userdata pri ďalších RPC. Heslo, hash ani session_id nevypisujte a neukladajte do zdrojov.",
+    "Klient neprijíma prihlasovacie údaje. Návratové kódy: 0 úspech, 2 neplatné argumenty, 1 chyba RPC. Zdrojový proto nemeňte."
+  ],
+  "example": "package main\nimport (\n    \"context\"\n    \"fmt\"\n    \"net\"\n    \"os\"\n    \"strconv\"\n    \"strings\"\n    \"time\"\n\n    pb \"example.com/oberon-client/pb\"\n    \"google.golang.org/grpc\"\n    \"google.golang.org/grpc/credentials/insecure\"\n    \"google.golang.org/grpc/status\"\n)\n\nfunc parseArgs(args []string) (string, int, error) {\n    if len(args) == 0 { return \"192.168.16.169\", 21008, nil }\n    if len(args) != 2 || strings.TrimSpace(args[0]) == \"\" { return \"\", 0, fmt.Errorf(\"usage: oberon-ping [host port]\") }\n    port, err := strconv.Atoi(args[1])\n    if err != nil || port < 1 || port > 65535 { return \"\", 0, fmt.Errorf(\"port must be 1..65535\") }\n    return args[0], port, nil\n}\n\nfunc run(args []string) int {\n    host, port, err := parseArgs(args)\n    if err != nil { fmt.Fprintln(os.Stderr, err); return 2 }\n    fmt.Fprintln(os.Stderr, \"WARNING: plaintext gRPC; trusted LAN only (no TLS).\")\n    conn, err := grpc.NewClient(net.JoinHostPort(host, strconv.Itoa(port)), grpc.WithTransportCredentials(insecure.NewCredentials()))\n    if err != nil { fmt.Fprintln(os.Stderr, \"channel creation failed\"); return 1 }\n    defer conn.Close()\n    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)\n    defer cancel()\n    response, err := pb.NewOBERONServiceGRPCClient(conn).Ping(ctx, &pb.PingRequest{Message: \"hello\"})\n    if err != nil { fmt.Fprintln(os.Stderr, \"Ping failed:\", status.Code(err)); return 1 }\n    fmt.Println(\"Ping ->\", response.GetMessage())\n    return 0\n}\n\nfunc main() { os.Exit(run(os.Args[1:])) }\n"
+}

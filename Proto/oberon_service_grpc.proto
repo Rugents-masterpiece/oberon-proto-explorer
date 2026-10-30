@@ -1,0 +1,2053 @@
+syntax = "proto3";
+
+package oberon.servicegateway;
+
+option csharp_namespace = "Exa.OBERON.ServiceGateway.Contracts";
+
+// ============================================================================
+// Core Value Types
+// ============================================================================
+
+message OberonDateTime {
+  string value = 1;
+}
+
+message Money {
+  string value = 1;
+}
+
+message DecimalValue {
+  string value = 1;
+}
+
+message GuidValue {
+  string value = 1;
+}
+
+message LongId {
+  int64 value = 1;
+}
+
+message IntId {
+  int32 value = 1;
+}
+
+message StringId {
+  string value = 1;
+}
+
+// ============================================================================
+// Record Base Info
+// ============================================================================
+
+message RecordBaseInfo {
+  string guid = 1;
+  int64 idNum = 2;
+  string info = 3;
+  string value = 4;
+}
+
+// ============================================================================
+// Pagination
+// ============================================================================
+
+message PaginationRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  string sortBy = 3;
+  bool sortOrderAscending = 4;
+}
+
+message PaginationResponse {
+  int32 totalCount = 1;
+  int32 page = 2;
+  int32 pageSize = 3;
+  int32 totalPages = 4;
+}
+
+// ============================================================================
+// Error Response
+// ============================================================================
+
+message ErrorResponse {
+  string code = 1;
+  string message = 2;
+  repeated string details = 3;
+  string correlationId = 4;
+}
+
+// ============================================================================
+// System Info
+// ============================================================================
+
+message VersionInfo {
+  string version = 1;
+  string buildDate = 2;
+  string environment = 3;
+  string serverName = 4;
+}
+
+// ============================================================================
+// Ping/Pong
+// ============================================================================
+
+message PingRequest {
+  string message = 1;
+}
+
+message PingResponse {
+  string message = 1;
+}
+
+// ============================================================================
+// Version Request
+// ============================================================================
+
+message VersionRequest {
+}
+
+// ============================================================================
+// Server Info
+// ============================================================================
+
+message ServerInfoRequest {
+}
+
+message ServerInfoResponse {
+  string serverName = 1;
+  string version = 2;
+  string environment = 3;
+  OberonDateTime uptime = 4;
+  int32 activeConnections = 5;
+  int64 totalRequests = 6;
+  int64 failedRequests = 7;
+  double cpuUsage = 8;
+  int64 memoryUsage = 9;
+  int64 memoryLimit = 10;
+}
+
+// ============================================================================
+// Health Check
+// ============================================================================
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse {
+  bool healthy = 1;
+  string status = 2;
+  string message = 3;
+  OberonDateTime timestamp = 4;
+}
+
+// ============================================================================
+// Authentication
+// ============================================================================
+
+message AuthenticateRequest {
+  string username = 1;
+  string password = 2;
+  string clientId = 3;
+  string branchName = 4;
+  string terminalId = 5;
+}
+
+message AuthenticateResponse {
+  bool success = 1;
+  string token = 2;
+  string sessionId = 3;
+  OberonDateTime expiresAt = 4;
+  UserInfo user = 5;
+  string correlationId = 6;
+}
+
+message RefreshTokenRequest {
+  string token = 1;
+}
+
+message RefreshTokenResponse {
+  bool success = 1;
+  string token = 2;
+  string sessionId = 3;
+  OberonDateTime expiresAt = 4;
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool isValid = 1;
+  string userId = 2;
+  string username = 3;
+  string sessionId = 4;
+  OberonDateTime expiresAt = 5;
+}
+
+message LogoutRequest {
+  string sessionId = 1;
+}
+
+message LogoutResponse {
+  bool success = 1;
+}
+
+message GetSessionInfoRequest {
+  string sessionId = 1;
+}
+
+message GetSessionInfoResponse {
+  string sessionId = 1;
+  string userId = 2;
+  string username = 3;
+  OberonDateTime issuedAt = 4;
+  OberonDateTime expiresAt = 5;
+  bool isActive = 6;
+  UserInfo user = 7;
+}
+
+message UserInfo {
+  string userId = 1;
+  string username = 2;
+  string displayName = 3;
+  string email = 4;
+  repeated string roles = 5;
+  repeated string permissions = 6;
+}
+
+// ============================================================================
+// User Management
+// ============================================================================
+
+message GetUserInfoRequest {
+  string userId = 1;
+}
+
+message GetUserInfoResponse {
+  UserInfo user = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message SearchUsersRequest {
+  string searchTerm = 1;
+  int32 pageSize = 2;
+  int32 pageNumber = 3;
+}
+
+message SearchUsersResponse {
+  repeated UserInfo users = 1;
+  PaginationResponse pagination = 2;
+}
+
+// ============================================================================
+// Business Partner
+// ============================================================================
+
+message GetBusinessPartnerRequest {
+  string bpId = 1;
+  string identificationNumber = 2;
+  optional BackendTarget target_backend = 3; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetBusinessPartnerResponse {
+  BusinessPartner businessPartner = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message SearchBusinessPartnersRequest {
+  string searchTerm = 1;
+  int32 pageSize = 2;
+  int32 pageNumber = 3;
+  optional BackendTarget target_backend = 4; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message SearchBusinessPartnersResponse {
+  repeated BusinessPartner businessPartners = 1;
+  PaginationResponse pagination = 2;
+}
+
+// ============================================================================
+// Business Partner - Find (Search)
+// ============================================================================
+
+message FindMethod {
+  int32 value = 1;
+}
+
+message FindBusinessPartnersRequest {
+  string findValue = 1;
+  FindMethod findMethod = 2;
+  bool getBranches = 3;
+  int32 getBranchesFilter = 4;
+  int32 getFileRepositoryBinaryDataMode = 5;
+  int32 getFileRepositoryBinaryDataFilterIDNums = 6;
+  optional BackendTarget target_backend = 7; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message FindBusinessPartnersResponse {
+  repeated BusinessPartner businessPartners = 1;
+  PaginationResponse pagination = 2;
+}
+
+// ============================================================================
+// Business Partner - List (Paginated)
+// ============================================================================
+
+message ListBusinessPartnersRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  string sortBy = 3;
+  bool sortOrderAscending = 4;
+  string filter = 5;
+  optional BackendTarget target_backend = 6; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message ListBusinessPartnersResponse {
+  repeated BusinessPartner businessPartners = 1;
+  PaginationResponse pagination = 2;
+}
+
+// ============================================================================
+// Business Partner - List Settings
+// ============================================================================
+
+message GetBusinessPartnerListSettingsRequest {
+  optional BackendTarget target_backend = 1; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetBusinessPartnerListSettingsResponse {
+  repeated string columns = 1;
+  repeated string specialFilters = 2;
+}
+
+// ============================================================================
+// Business Partner - Groups
+// ============================================================================
+
+message ListBusinessPartnerGroupsRequest {
+  optional BackendTarget target_backend = 1; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message ListBusinessPartnerGroupsResponse {
+  repeated BusinessPartnerGroup businessPartnerGroups = 1;
+}
+
+message BusinessPartnerGroup {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  bool isActive = 4;
+}
+
+message BusinessPartner {
+  string id = 1;
+  string code = 2;
+  string name = 3;
+  string ico = 4;
+  string dic = 5;
+  string icDph = 6;
+  string address = 7;
+  string city = 8;
+  string postalCode = 9;
+  string country = 10;
+  string phone = 11;
+  string email = 12;
+  string website = 13;
+  string contactPerson = 14;
+  string bankAccount = 15;
+  string bankCode = 16;
+  string note = 17;
+  bool isActive = 18;
+}
+
+// ============================================================================
+// Business Partner - Credit Limit
+// ============================================================================
+
+message GetBusinessPartnerCreditLimitRequest {
+  string identificationNumber = 1;
+  optional BackendTarget target_backend = 2; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetBusinessPartnerCreditLimitResponse {
+  bool isExceeded = 1;
+  DecimalValue allowedValue = 2;
+  DecimalValue configuredValue = 3;
+  string businessPartnerIdentificationNumber = 4;
+  string businessPartnerName = 5;
+  repeated string turnoverInfo = 6;
+  repeated string overdueInfo = 7;
+}
+
+// ============================================================================
+// Business Partner - Add
+// ============================================================================
+
+message AddBusinessPartnerRequest {
+  BusinessPartner businessPartner = 1;
+  optional BackendTarget target_backend = 2; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message AddBusinessPartnerResponse {
+  RecordBaseInfo recordInfo = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+// ============================================================================
+// Business Partner - Update
+// ============================================================================
+
+message UpdateBusinessPartnerRequest {
+  BusinessPartnerHeader header = 1;
+  optional BackendTarget target_backend = 2; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message UpdateBusinessPartnerResponse {
+  RecordBaseInfo recordInfo = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message BusinessPartnerHeader {
+  string recordGuid = 1;
+  string name = 2;
+  string identificationNumber = 3;
+  string identificationNumberTax = 4;
+  string identificationNumberVat = 5;
+  string address = 6;
+  string city = 7;
+  string postalCode = 8;
+  string country = 9;
+  string email = 10;
+  string phone = 11;
+  string web = 12;
+  string contactPerson = 13;
+  string bankAccount = 14;
+  string bankCode = 15;
+  string note = 16;
+  bool isActive = 17;
+}
+
+// ============================================================================
+// Business Partner - Delete
+// ============================================================================
+
+message DeleteBusinessPartnerRequest {
+  string recordGuid = 1;
+  string identificationNumber = 2;
+  optional BackendTarget target_backend = 3; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message DeleteBusinessPartnerResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ============================================================================
+// Product
+// ============================================================================
+
+message GetProductRequest {
+  string productId = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+message GetProductResponse {
+  Product product = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message SearchProductsRequest {
+  string searchTerm = 1;
+  int32 pageSize = 2;
+  int32 pageNumber = 3;
+  optional BackendTarget target_backend = 4;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+message SearchProductsResponse {
+  repeated Product products = 1;
+  PaginationResponse pagination = 2;
+}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  string description = 4;
+  DecimalValue price = 5;
+  string unit = 6;
+  string category = 7;
+  bool isActive = 8;
+  OberonDateTime created = 9;
+  OberonDateTime modified = 10;
+}
+
+// ============================================================================
+// Stock
+// ============================================================================
+
+
+// Backend generation selector for dual-routed RPCs.
+// UNSPECIFIED preserves status-quo routing (Gen1 for Stock). Selection NEVER re-routes implicitly:
+// an unauthenticated requested backend fails explicitly (BackendNotAuthenticated).
+enum BackendTarget {
+  BACKEND_TARGET_UNSPECIFIED = 0;
+  BACKEND_TARGET_GEN1 = 1;
+  BACKEND_TARGET_GEN2 = 2;
+}
+
+message GetStockRequest {
+  string productId = 1;
+  string warehouseId = 2;
+  optional BackendTarget target_backend = 3;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockResponse {
+  Stock stock = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message Stock {
+  string productId = 1;
+  string warehouseId = 2;
+  DecimalValue quantity = 3;
+  DecimalValue reservedQuantity = 4;
+  DecimalValue availableQuantity = 5;
+  OberonDateTime lastUpdated = 6;
+}
+
+// ============================================================================
+// Document
+// ============================================================================
+
+message GetDocumentRequest {
+  string documentId = 1;
+}
+
+message GetDocumentResponse {
+  Document document = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message SearchDocumentsRequest {
+  string searchTerm = 1;
+  int32 pageSize = 2;
+  int32 pageNumber = 3;
+}
+
+message SearchDocumentsResponse {
+  repeated Document documents = 1;
+  PaginationResponse pagination = 2;
+}
+
+message Document {
+  string id = 1;
+  string number = 2;
+  string type = 3;
+  string bpId = 4;
+  OberonDateTime date = 5;
+  DecimalValue totalAmount = 6;
+  DecimalValue totalTax = 7;
+  DecimalValue totalNet = 8;
+  string currency = 9;
+  string status = 10;
+  repeated DocumentLine lines = 11;
+  OberonDateTime created = 12;
+  OberonDateTime modified = 13;
+}
+
+message DocumentLine {
+  string id = 1;
+  string documentId = 2;
+  string productId = 3;
+  string productName = 4;
+  DecimalValue quantity = 5;
+  DecimalValue unitPrice = 6;
+  DecimalValue totalAmount = 7;
+  DecimalValue taxRate = 8;
+  DecimalValue taxAmount = 9;
+}
+
+// ============================================================================
+// Invoice
+// ============================================================================
+
+message GetInvoiceRequest {
+  string invoiceId = 1;
+  optional BackendTarget target_backend = 2; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetInvoiceResponse {
+  Invoice invoice = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message CreateInvoiceRequest {
+  string bpId = 1;
+  OberonDateTime date = 2;
+  repeated InvoiceLine lines = 3;
+  string currency = 4;
+  string note = 5;
+  optional BackendTarget target_backend = 6; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message CreateInvoiceResponse {
+  string invoiceId = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message Invoice {
+  string id = 1;
+  string number = 2;
+  string bpId = 3;
+  OberonDateTime date = 4;
+  DecimalValue totalAmount = 5;
+  DecimalValue totalTax = 6;
+  DecimalValue totalNet = 7;
+  string currency = 8;
+  string status = 9;
+  repeated InvoiceLine lines = 10;
+  string note = 11;
+  OberonDateTime created = 12;
+  OberonDateTime modified = 13;
+}
+
+message InvoiceLine {
+  string id = 1;
+  string invoiceId = 2;
+  string productId = 3;
+  string productName = 4;
+  DecimalValue quantity = 5;
+  DecimalValue unitPrice = 6;
+  DecimalValue totalAmount = 7;
+  DecimalValue taxRate = 8;
+  DecimalValue taxAmount = 9;
+}
+
+// ============================================================================
+// Cash Register
+// ============================================================================
+
+message GetCashRegisterTransactionRequest {
+  string transactionId = 1;
+}
+
+message GetCashRegisterTransactionResponse {
+  CashRegisterTransaction transaction = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message OpenCashDrawerRequest {
+  string deviceId = 1;
+}
+
+message OpenCashDrawerResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message PrintReceiptRequest {
+  string transactionId = 1;
+  string printerId = 2;
+  int32 copies = 3;
+}
+
+message PrintReceiptResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CashRegisterTransaction {
+  string id = 1;
+  string number = 2;
+  OberonDateTime date = 3;
+  DecimalValue totalAmount = 4;
+  string status = 5;
+  string bpId = 6;
+  repeated CashRegisterTransactionLine lines = 7;
+  repeated Payment payments = 8;
+  OberonDateTime created = 9;
+  OberonDateTime modified = 10;
+}
+
+message CashRegisterTransactionLine {
+  string id = 1;
+  string transactionId = 2;
+  string productId = 3;
+  string productName = 4;
+  DecimalValue quantity = 5;
+  DecimalValue unitPrice = 6;
+  DecimalValue totalAmount = 7;
+  DecimalValue taxRate = 8;
+  DecimalValue taxAmount = 9;
+}
+
+message Payment {
+  string id = 1;
+  string type = 2;
+  DecimalValue amount = 3;
+  string currency = 4;
+  string reference = 5;
+}
+
+// ============================================================================
+// Loyalty System
+// ============================================================================
+
+message GetLoyaltyCardRequest {
+  string cardNumber = 1;
+}
+
+message GetLoyaltyCardResponse {
+  LoyaltyCard card = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message AddLoyaltyPointsRequest {
+  string cardNumber = 1;
+  int32 points = 2;
+  string reason = 3;
+  string transactionId = 4;
+}
+
+message AddLoyaltyPointsResponse {
+  bool success = 1;
+  string message = 2;
+  int32 newBalance = 3;
+}
+
+message LoyaltyCard {
+  string id = 1;
+  string cardNumber = 2;
+  string bpId = 3;
+  int32 points = 4;
+  int32 lifetimePoints = 5;
+  bool isActive = 6;
+  OberonDateTime created = 7;
+  OberonDateTime modified = 8;
+}
+
+message LoyaltyTransaction {
+  string id = 1;
+  string cardNumber = 2;
+  int32 points = 3;
+  string type = 4;
+  string reason = 5;
+  string referenceId = 6;
+  OberonDateTime date = 7;
+}
+
+// ============================================================================
+// Reports
+// ============================================================================
+
+message GetReportRequest {
+  string reportName = 1;
+  map<string, string> parameters = 2;
+  OberonDateTime dateFrom = 3;
+  OberonDateTime dateTo = 4;
+}
+
+message GetReportResponse {
+  bytes data = 1;
+  string format = 2;
+  bool success = 3;
+  string message = 4;
+}
+
+// ============================================================================
+// Settings
+// ============================================================================
+
+message GetSettingsRequest {
+  string category = 1;
+  string name = 2;
+}
+
+message GetSettingsResponse {
+  repeated Setting settings = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message Setting {
+  string id = 1;
+  string name = 2;
+  string value = 3;
+  string category = 4;
+  string description = 5;
+  OberonDateTime modified = 6;
+}
+
+message UpdateSettingRequest {
+  string name = 1;
+  string value = 2;
+  string category = 3;
+}
+
+message UpdateSettingResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ============================================================================
+// Server Management
+// ============================================================================
+
+message GetTimestampRequest {
+}
+
+message GetTimestampResponse {
+  OberonDateTime timestamp = 1;
+}
+
+message GetVersionRequest {
+}
+
+message GetVersionResponse {
+  string version = 1;
+}
+
+message GetServerTimeRequest {
+}
+
+message GetServerTimeResponse {
+  OberonDateTime time = 1;
+}
+
+message GetUptimeRequest {
+}
+
+message GetUptimeResponse {
+  int64 seconds = 1;
+}
+
+message GetServerStatusRequest {
+}
+
+message GetServerStatusResponse {
+  bool running = 1;
+  string environment = 2;
+  OberonDateTime startTime = 3;
+  int32 activeConnections = 4;
+  int64 totalRequests = 5;
+  int64 failedRequests = 6;
+}
+
+message GetServerMetricsRequest {
+}
+
+message GetServerMetricsResponse {
+  repeated Metric metrics = 1;
+}
+
+message Metric {
+  string name = 1;
+  string value = 2;
+  string unit = 3;
+}
+
+message GetServerLogsRequest {
+  int32 count = 1;
+  string level = 2;
+}
+
+message GetServerLogsResponse {
+  repeated LogEntry logs = 1;
+}
+
+message LogEntry {
+  OberonDateTime timestamp = 1;
+  string level = 2;
+  string logger = 3;
+  string message = 4;
+  string exception = 5;
+}
+
+message GetServerConfigRequest {
+}
+
+message GetServerConfigResponse {
+  map<string, string> config = 1;
+}
+
+message GetServerFeaturesRequest {
+}
+
+message GetServerFeaturesResponse {
+  repeated string features = 1;
+}
+
+message GetServerPluginsRequest {
+}
+
+message GetServerPluginsResponse {
+  repeated Plugin plugins = 1;
+}
+
+message Plugin {
+  string name = 1;
+  string version = 2;
+  bool isEnabled = 3;
+}
+
+message GetServerModulesRequest {
+}
+
+message GetServerModulesResponse {
+  repeated Module modules = 1;
+}
+
+message Module {
+  string name = 1;
+  string version = 2;
+  bool isLoading = 3;
+  bool isLoaded = 4;
+}
+
+message GetServerDependenciesRequest {
+}
+
+message GetServerDependenciesResponse {
+  repeated Dependency dependencies = 1;
+}
+
+message Dependency {
+  string name = 1;
+  string version = 2;
+  bool isRequired = 3;
+}
+
+message GetServerEnvironmentRequest {
+}
+
+message GetServerEnvironmentResponse {
+  map<string, string> environment = 1;
+}
+
+message GetServerProcessorsRequest {
+}
+
+message GetServerProcessorsResponse {
+  repeated Processor processors = 1;
+}
+
+message Processor {
+  string name = 1;
+  int32 count = 2;
+  int32 logicalCount = 3;
+}
+
+message GetServerMemoryRequest {
+}
+
+message GetServerMemoryResponse {
+  int64 total = 1;
+  int64 available = 2;
+  int64 used = 3;
+  double usagePercent = 4;
+}
+
+message GetServerDiskRequest {
+}
+
+message GetServerDiskResponse {
+  repeated DiskInfo disks = 1;
+}
+
+message DiskInfo {
+  string name = 1;
+  string path = 2;
+  int64 total = 3;
+  int64 free = 4;
+  double usagePercent = 5;
+}
+
+message GetServerNetworkRequest {
+}
+
+message GetServerNetworkResponse {
+  repeated NetworkInfo networks = 1;
+}
+
+message NetworkInfo {
+  string name = 1;
+  string macAddress = 2;
+  string ipAddress = 3;
+  bool isUp = 4;
+}
+
+message GetServerServicesRequest {
+}
+
+message GetServerServicesResponse {
+  repeated ServiceInfo services = 1;
+}
+
+message ServiceInfo {
+  string name = 1;
+  string status = 2;
+  string type = 3;
+}
+
+message GetServerTasksRequest {
+}
+
+message GetServerTasksResponse {
+  repeated TaskInfo tasks = 1;
+}
+
+message TaskInfo {
+  string id = 1;
+  string name = 2;
+  string status = 3;
+  OberonDateTime lastRun = 4;
+  OberonDateTime nextRun = 5;
+}
+
+message GetServerJobsRequest {
+}
+
+message GetServerJobsResponse {
+  repeated JobInfo jobs = 1;
+}
+
+message JobInfo {
+  string id = 1;
+  string name = 2;
+  string status = 3;
+  OberonDateTime startedAt = 4;
+  OberonDateTime finishedAt = 5;
+}
+
+message GetServerQueuesRequest {
+}
+
+message GetServerQueuesResponse {
+  repeated QueueInfo queues = 1;
+}
+
+message QueueInfo {
+  string name = 1;
+  int32 length = 2;
+  int32 active = 3;
+  int32 completed = 4;
+}
+
+message GetServerCacheRequest {
+}
+
+message GetServerCacheResponse {
+  CacheInfo cache = 1;
+}
+
+message CacheInfo {
+  int32 itemCount = 1;
+  int64 sizeBytes = 2;
+  double hitRate = 3;
+}
+
+message GetServerConnectionsRequest {
+}
+
+message GetServerConnectionsResponse {
+  repeated ConnectionInfo connections = 1;
+}
+
+message ConnectionInfo {
+  string id = 1;
+  string clientIp = 2;
+  OberonDateTime connectedAt = 3;
+  bool isActive = 4;
+}
+
+message GetServerSessionsRequest {
+}
+
+message GetServerSessionsResponse {
+  repeated SessionInfo sessions = 1;
+}
+
+message SessionInfo {
+  string id = 1;
+  string userId = 2;
+  string clientIp = 3;
+  OberonDateTime createdAt = 4;
+  OberonDateTime lastActivity = 5;
+  bool isActive = 6;
+}
+
+message GetServerEventsRequest {
+  int32 count = 1;
+}
+
+message GetServerEventsResponse {
+  repeated EventInfo events = 1;
+}
+
+message EventInfo {
+  string id = 1;
+  string type = 2;
+  string message = 3;
+  OberonDateTime timestamp = 4;
+}
+
+message GetServerNotificationsRequest {
+  int32 count = 1;
+}
+
+message GetServerNotificationsResponse {
+  repeated NotificationInfo notifications = 1;
+}
+
+message NotificationInfo {
+  string id = 1;
+  string title = 2;
+  string message = 3;
+  string type = 4;
+  OberonDateTime timestamp = 5;
+}
+
+message GetServerAlertsRequest {
+  int32 count = 1;
+}
+
+message GetServerAlertsResponse {
+  repeated AlertInfo alerts = 1;
+}
+
+message AlertInfo {
+  string id = 1;
+  string title = 2;
+  string message = 3;
+  string severity = 4;
+  OberonDateTime timestamp = 5;
+}
+
+message GetServerWarningsRequest {
+  int32 count = 1;
+}
+
+message GetServerWarningsResponse {
+  repeated WarningInfo warnings = 1;
+}
+
+message WarningInfo {
+  string id = 1;
+  string message = 2;
+  string category = 3;
+  OberonDateTime timestamp = 4;
+}
+
+message GetServerErrorsRequest {
+  int32 count = 1;
+}
+
+message GetServerErrorsResponse {
+  repeated ErrorInfo errors = 1;
+}
+
+message ErrorInfo {
+  string id = 1;
+  string message = 2;
+  string stackTrace = 3;
+  OberonDateTime timestamp = 4;
+}
+
+message GetServerExceptionsRequest {
+  int32 count = 1;
+}
+
+message GetServerExceptionsResponse {
+  repeated ExceptionInfo exceptions = 1;
+}
+
+message ExceptionInfo {
+  string id = 1;
+  string type = 2;
+  string message = 3;
+  string stackTrace = 4;
+  OberonDateTime timestamp = 5;
+}
+
+message GetServerStackTracesRequest {
+  int32 count = 1;
+}
+
+message GetServerStackTracesResponse {
+  repeated StackTraceInfo stackTraces = 1;
+}
+
+message StackTraceInfo {
+  string id = 1;
+  string exceptionType = 2;
+  string stackTrace = 3;
+  OberonDateTime timestamp = 4;
+}
+
+message GetServerThreadsRequest {
+}
+
+message GetServerThreadsResponse {
+  repeated ThreadInfo threads = 1;
+}
+
+message ThreadInfo {
+  int32 id = 1;
+  string name = 2;
+  string state = 3;
+  double cpuTime = 4;
+}
+
+message GetServerHandlesRequest {
+}
+
+message GetServerHandlesResponse {
+  int32 count = 1;
+  int64 handleCount = 2;
+}
+
+// ============================================================================
+// Stock Card (Product)
+// ============================================================================
+
+message GetStockCardsRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  string filter = 3;
+  optional BackendTarget target_backend = 4;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardsResponse {
+  repeated StockCard stockCards = 1;
+  PaginationResponse pagination = 2;
+}
+
+message GetStockCardRequest {
+  string stockCardGuid = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardResponse {
+  StockCard stockCard = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message GetStockCardFindRequest {
+  string findValue = 1;
+  int32 findMethod = 2;
+  int32 page = 3;
+  int32 pageSize = 4;
+  optional BackendTarget target_backend = 5;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardFindResponse {
+  repeated StockCard stockCards = 1;
+  PaginationResponse pagination = 2;
+}
+
+message GetStockCardInventoryFindRequest {
+  uint32 findMethod = 1;
+  string findValue = 2;
+  bool getVariants = 3;
+  optional BackendTarget target_backend = 4;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardInventoryFindResponse {
+  repeated StockCardInventory inventories = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message StockCard {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  string category = 4;
+  string unit = 5;
+  DecimalValue price = 6;
+  bool isActive = 7;
+}
+
+// ============================================================================
+// Stock Card Write Operations (Proxy-only)
+// ============================================================================
+
+message SetStockCardRequest {
+  string warehouseName = 1;
+  // Numeric ID of the stock card. 0 = create new card.
+  // Non-zero = update existing card identified by this ID.
+  int64 idNum = 2;
+  string name = 3;
+  string code = 4;
+  string barCode = 5;
+  DecimalValue priceWithVat = 6;
+  DecimalValue priceWithoutVat = 7;
+  string unit = 8;
+  string location = 9;
+  string catalog = 10;
+  bool isActive = 11;
+  optional BackendTarget target_backend = 12;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message SetStockCardResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message DeleteStockCardRequest {
+  string warehouseName = 1;
+  // Numeric ID of the stock card to delete.
+  int64 idNum = 2;
+  optional BackendTarget target_backend = 3;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message DeleteStockCardResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetStockCardInventoryRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  string filter = 3;
+  optional BackendTarget target_backend = 4;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardInventoryResponse {
+  repeated StockCardInventory inventories = 1;
+  PaginationResponse pagination = 2;
+}
+
+message StockCardInventory {
+  string stockCardGuid = 1;
+  string stockCardName = 2;
+  string warehouseGuid = 3;
+  string warehouseName = 4;
+  DecimalValue quantity = 5;
+}
+
+message GetStockBalanceRequest {
+  string productId = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockBalanceResponse {
+  repeated StockBalance balances = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message StockBalance {
+  string stockCardGuid = 1;
+  string stockCardName = 2;
+  DecimalValue totalQuantity = 3;
+  DecimalValue totalValue = 4;
+}
+
+message GetStockCardAttributesRequest {
+  string productId = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardAttributesResponse {
+  repeated StockCardAttribute attributes = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message StockCardAttribute {
+  string attributeName = 1;
+  string attributeValue = 2;
+}
+
+message GetStockCardCustomerPricesRequest {
+  string productId = 1;
+  string businessPartnerId = 2;
+  optional BackendTarget target_backend = 3;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardCustomerPricesResponse {
+  repeated StockCardCustomerPrice prices = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message StockCardCustomerPrice {
+  string businessPartnerGuid = 1;
+  string businessPartnerName = 2;
+  DecimalValue price = 3;
+  DecimalValue discount = 4;
+}
+
+message GetStockCardsTreeCategoryRequest {
+  string categoryGuid = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetStockCardsTreeCategoryResponse {
+  repeated StockCardTreeNode nodes = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message StockCardTreeNode {
+  string id = 1;
+  string name = 2;
+  string parentGuid = 3;
+  int32 level = 4;
+}
+
+message GetMovementDocumentTypesRequest {
+  optional BackendTarget target_backend = 1;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetMovementDocumentTypesResponse {
+  repeated MovementDocumentType types = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message MovementDocumentType {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  bool isActive = 4;
+}
+
+// ============================================================================
+// Company/Common
+// ============================================================================
+
+message GetCompanyInfoRequest {
+  optional BackendTarget target_backend = 1; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetCompanyInfoResponse {
+  CompanyInfo company = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message CompanyInfo {
+  string name = 1;
+  string identificationNumber = 2;
+  string identificationNumberTax = 3;
+  string identificationNumberVat = 4;
+  string address = 5;
+  string city = 6;
+  string postalCode = 7;
+  string country = 8;
+  string email = 9;
+  string phoneNumber = 10;
+}
+
+message GetCompanySettingsRequest {
+  string settingKey = 1;
+  optional BackendTarget target_backend = 2; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetCompanySettingsResponse {
+  map<string, string> settings = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message GetCompanyBranchesRequest {
+  optional BackendTarget target_backend = 1; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetCompanyBranchesResponse {
+  repeated CompanyBranch branches = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message CompanyBranch {
+  string id = 1;
+  string name = 2;
+  string address = 3;
+  string city = 4;
+  string postalCode = 5;
+  string phoneNumber = 6;
+  string email = 7;
+}
+
+// ============================================================================
+// Cash Register Extended
+// ============================================================================
+
+message GetCashRegistersBillsOpenRequest {
+  string cashRegisterGuid = 1;
+  optional BackendTarget target_backend = 2; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetCashRegistersBillsOpenResponse {
+  repeated CashRegisterBill bills = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message CashRegisterBill {
+  string billNumber = 1;
+  OberonDateTime billDate = 2;
+  DecimalValue totalAmount = 3;
+  string status = 4;
+}
+
+message GetCashRegistersTurnoverRequest {
+  string cashRegisterGuid = 1;
+  OberonDateTime fromDate = 2;
+  OberonDateTime toDate = 3;
+  optional BackendTarget target_backend = 4; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetCashRegistersTurnoverResponse {
+  repeated CashRegisterTurnover turnvers = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message CashRegisterTurnover {
+  OberonDateTime date = 1;
+  DecimalValue totalSales = 2;
+  DecimalValue totalReturns = 3;
+  int32 transactionCount = 4;
+}
+
+message GetCashRegisterDailyBalanceHistoryRequest {
+  string cashRegisterGuid = 1;
+  OberonDateTime fromDate = 2;
+  OberonDateTime toDate = 3;
+  optional BackendTarget target_backend = 4; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetCashRegisterDailyBalanceHistoryResponse {
+  repeated DailyBalance history = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message DailyBalance {
+  OberonDateTime date = 1;
+  DecimalValue openingBalance = 2;
+  DecimalValue closingBalance = 3;
+  DecimalValue totalSales = 4;
+}
+
+// ============================================================================
+// Hotel
+// ============================================================================
+
+message GetHotelRoomsRequest {
+  string filter = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetHotelRoomsResponse {
+  repeated HotelRoom rooms = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message HotelRoom {
+  string id = 1;
+  string roomNumber = 2;
+  string roomType = 3;
+  string status = 4;
+  DecimalValue pricePerNight = 5;
+}
+
+message GetHotelGuestsRequest {
+  string filter = 1;
+  optional BackendTarget target_backend = 2;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetHotelGuestsResponse {
+  repeated HotelGuest guests = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message HotelGuest {
+  string id = 1;
+  string name = 2;
+  string passportNumber = 3;
+  string phoneNumber = 4;
+  string email = 5;
+}
+
+message GetHotelRoomReservationsRequest {
+  string roomGuid = 1;
+  OberonDateTime checkInDate = 2;
+  OberonDateTime checkOutDate = 3;
+  optional BackendTarget target_backend = 4;  // dual-backend routing: empty = Gen1 default; never silently re-routes
+}
+
+message GetHotelRoomReservationsResponse {
+  repeated HotelReservation reservations = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message HotelReservation {
+  string id = 1;
+  string guestName = 2;
+  string roomNumber = 3;
+  OberonDateTime checkInDate = 4;
+  OberonDateTime checkOutDate = 5;
+  string status = 6;
+}
+
+// ============================================================================
+// Food Menu
+// ============================================================================
+
+message GetFoodMenuListRequest {
+  optional BackendTarget target_backend = 1; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetFoodMenuListResponse {
+  repeated FoodMenuItem items = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message FoodMenuItem {
+  string id = 1;
+  string name = 2;
+  DecimalValue price = 3;
+  string category = 4;
+  bool isActive = 5;
+}
+
+message GetFoodMenuGroupListRequest {
+  optional BackendTarget target_backend = 1; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetFoodMenuGroupListResponse {
+  repeated FoodMenuGroup groups = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message FoodMenuGroup {
+  string id = 1;
+  string name = 2;
+  int32 displayOrder = 3;
+}
+
+message GetFoodMenuRequest {
+  string categoryGuid = 1;
+  string foodMenuName = 2;
+  optional BackendTarget target_backend = 3; // per-request Gen1/Gen2 selection (0/unspecified/1 = legacy path)
+}
+
+message GetFoodMenuResponse {
+  repeated FoodMenuCategory categories = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message FoodMenuCategory {
+  string id = 1;
+  string name = 2;
+  repeated FoodMenuItem items = 3;
+}
+
+// ============================================================================
+// Login pass-through messages (original G1/G2 login semantics)
+message LoginSaltRequest {
+  string username = 1;
+}
+
+message LoginSaltResponse {
+  bool result = 1;
+  string description = 2;
+  string data = 3;
+}
+
+message LoginUserRequest {
+  string username = 1;
+  // Legacy field: Gen2-only password hash (SHA1(Gen2Salt+password)). NEVER used for Gen1.
+  string passwordHash = 2;
+  // Optional explicit per-backend hashes (dual-session login). Gen2PasswordHash takes
+  // precedence over legacy passwordHash when both are supplied.
+  string gen1PasswordHash = 3;
+  string gen2PasswordHash = 4;
+  // Optional CashRegister-Gen2 password hash (SHA1(CashRegisterGen2Salt+password), see
+  // GetLoginSalts). Authenticates the third backend so CallCRG2Procedure can be used.
+  string cashRegisterGen2PasswordHash = 5;
+}
+
+message LoginUserExRequest {
+  string username = 1;
+  // Legacy field: Gen2-only password hash. NEVER used for Gen1.
+  string passwordHash = 2;
+  string loginTag = 3;
+  string gen1PasswordHash = 4;
+  string gen2PasswordHash = 5;
+  // Optional CashRegister-Gen2 password hash (see LoginUserRequest.cashRegisterGen2PasswordHash).
+  string cashRegisterGen2PasswordHash = 6;
+}
+
+message LoginSaltsRequest {
+  string username = 1;
+}
+
+message LoginSaltsResponse {
+  bool result = 1;          // true when at least one backend produced a salt
+  string description = 2;
+  bool gen1Result = 3;
+  string gen1Salt = 4;
+  bool gen2Result = 5;
+  string gen2Salt = 6;
+  // CashRegister-Gen2 login salt (third backend). Empty/unset when CR-G2 is not configured.
+  bool cashRegisterGen2Result = 7;
+  string cashRegisterGen2Salt = 8;
+}
+
+message ProxyLoginResponse {
+  bool result = 1;
+  string description = 2;
+  string sessionId = 3;
+}
+
+message IsLoginRequest {
+  string sessionId = 1;
+}
+
+message IsLoginResponse {
+  bool isLoggedIn = 1;
+}
+
+// Service Definition
+// ============================================================================
+
+service OBERONServiceGRPC {
+  // System
+  rpc Ping(PingRequest) returns (PingResponse);
+  rpc GetVersion(VersionRequest) returns (VersionInfo);
+  rpc GetDateTime(Empty) returns (OberonDateTime);
+  rpc GetServerInfo(ServerInfoRequest) returns (ServerInfoResponse);
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+  
+  // Authentication
+  rpc Authenticate(AuthenticateRequest) returns (AuthenticateResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+
+  // Login pass-through (identical semantics to the original Gen1/Gen2 web service login surface)
+  rpc GetLoginSalt(LoginSaltRequest) returns (LoginSaltResponse);
+  rpc GetLoginSalts(LoginSaltsRequest) returns (LoginSaltsResponse);
+  rpc LoginUser(LoginUserRequest) returns (ProxyLoginResponse);
+  rpc LoginUserEx(LoginUserExRequest) returns (ProxyLoginResponse);
+  rpc IsLogin(IsLoginRequest) returns (IsLoginResponse);
+  rpc GetSessionInfo(GetSessionInfoRequest) returns (GetSessionInfoResponse);
+  
+  // User Management
+  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+  rpc SearchUsers(SearchUsersRequest) returns (SearchUsersResponse);
+  
+  // Business Partner
+  rpc GetBusinessPartner(GetBusinessPartnerRequest) returns (GetBusinessPartnerResponse);
+  rpc SearchBusinessPartners(SearchBusinessPartnersRequest) returns (SearchBusinessPartnersResponse);
+  rpc FindBusinessPartners(FindBusinessPartnersRequest) returns (FindBusinessPartnersResponse);
+  rpc ListBusinessPartners(ListBusinessPartnersRequest) returns (ListBusinessPartnersResponse);
+  rpc GetBusinessPartnerListSettings(GetBusinessPartnerListSettingsRequest) returns (GetBusinessPartnerListSettingsResponse);
+  rpc ListBusinessPartnerGroups(ListBusinessPartnerGroupsRequest) returns (ListBusinessPartnerGroupsResponse);
+  rpc GetBusinessPartnerCreditLimit(GetBusinessPartnerCreditLimitRequest) returns (GetBusinessPartnerCreditLimitResponse);
+  rpc AddBusinessPartner(AddBusinessPartnerRequest) returns (AddBusinessPartnerResponse);
+  rpc UpdateBusinessPartner(UpdateBusinessPartnerRequest) returns (UpdateBusinessPartnerResponse);
+  rpc DeleteBusinessPartner(DeleteBusinessPartnerRequest) returns (DeleteBusinessPartnerResponse);
+  
+  // Product
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
+  rpc SearchProducts(SearchProductsRequest) returns (SearchProductsResponse);
+  
+  // Stock
+  rpc GetStock(GetStockRequest) returns (GetStockResponse);
+  rpc GetStockCard(GetStockCardRequest) returns (GetStockCardResponse);
+  rpc GetStockCardFind(GetStockCardFindRequest) returns (GetStockCardFindResponse);
+  rpc GetStockCards(GetStockCardsRequest) returns (GetStockCardsResponse);
+  rpc GetStockCardInventory(GetStockCardInventoryRequest) returns (GetStockCardInventoryResponse);
+  rpc GetStockCardInventoryFind(GetStockCardInventoryFindRequest) returns (GetStockCardInventoryFindResponse);
+  rpc GetStockBalance(GetStockBalanceRequest) returns (GetStockBalanceResponse);
+  rpc GetStockCardAttributes(GetStockCardAttributesRequest) returns (GetStockCardAttributesResponse);
+  rpc GetStockCardCustomerPrices(GetStockCardCustomerPricesRequest) returns (GetStockCardCustomerPricesResponse);
+  rpc GetStockCardsTreeCategory(GetStockCardsTreeCategoryRequest) returns (GetStockCardsTreeCategoryResponse);
+  rpc GetMovementDocumentTypes(GetMovementDocumentTypesRequest) returns (GetMovementDocumentTypesResponse);
+  // Stock Card Write Operations (Proxy-only)
+  rpc SetStockCard(SetStockCardRequest) returns (SetStockCardResponse);
+  rpc DeleteStockCard(DeleteStockCardRequest) returns (DeleteStockCardResponse);
+  
+  // Company/Common
+  rpc GetCompanyInfo(GetCompanyInfoRequest) returns (GetCompanyInfoResponse);
+  rpc GetCompanySettings(GetCompanySettingsRequest) returns (GetCompanySettingsResponse);
+  rpc GetCompanyBranches(GetCompanyBranchesRequest) returns (GetCompanyBranchesResponse);
+  
+  // Cash Register
+  rpc GetCashRegisterTransaction(GetCashRegisterTransactionRequest) returns (GetCashRegisterTransactionResponse);
+  rpc OpenCashDrawer(OpenCashDrawerRequest) returns (OpenCashDrawerResponse);
+  rpc PrintReceipt(PrintReceiptRequest) returns (PrintReceiptResponse);
+  rpc GetCashRegistersBillsOpen(GetCashRegistersBillsOpenRequest) returns (GetCashRegistersBillsOpenResponse);
+  rpc GetCashRegistersTurnover(GetCashRegistersTurnoverRequest) returns (GetCashRegistersTurnoverResponse);
+  rpc GetCashRegisterDailyBalanceHistory(GetCashRegisterDailyBalanceHistoryRequest) returns (GetCashRegisterDailyBalanceHistoryResponse);
+  
+  // Loyalty System
+  rpc GetLoyaltyCard(GetLoyaltyCardRequest) returns (GetLoyaltyCardResponse);
+  rpc AddLoyaltyPoints(AddLoyaltyPointsRequest) returns (AddLoyaltyPointsResponse);
+  
+  // Hotel
+  rpc GetHotelRooms(GetHotelRoomsRequest) returns (GetHotelRoomsResponse);
+  rpc GetHotelGuests(GetHotelGuestsRequest) returns (GetHotelGuestsResponse);
+  rpc GetHotelRoomReservations(GetHotelRoomReservationsRequest) returns (GetHotelRoomReservationsResponse);
+  
+  // Food Menu
+  rpc GetFoodMenuList(GetFoodMenuListRequest) returns (GetFoodMenuListResponse);
+  rpc GetFoodMenuGroupList(GetFoodMenuGroupListRequest) returns (GetFoodMenuGroupListResponse);
+  rpc GetFoodMenu(GetFoodMenuRequest) returns (GetFoodMenuResponse);
+  
+  // Document
+  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse);
+  rpc SearchDocuments(SearchDocumentsRequest) returns (SearchDocumentsResponse);
+  
+  // Invoice
+  rpc GetInvoice(GetInvoiceRequest) returns (GetInvoiceResponse);
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse);
+  
+  // Reports
+  rpc GetReport(GetReportRequest) returns (GetReportResponse);
+  
+  // Settings
+  rpc GetSettings(GetSettingsRequest) returns (GetSettingsResponse);
+  rpc UpdateSetting(UpdateSettingRequest) returns (UpdateSettingResponse);
+  
+  // Server Management
+  rpc GetTimestamp(GetTimestampRequest) returns (GetTimestampResponse);
+  rpc GetServerTime(GetServerTimeRequest) returns (GetServerTimeResponse);
+  rpc GetUptime(GetUptimeRequest) returns (GetUptimeResponse);
+  rpc GetServerStatus(GetServerStatusRequest) returns (GetServerStatusResponse);
+  rpc GetServerMetrics(GetServerMetricsRequest) returns (GetServerMetricsResponse);
+  rpc GetServerLogs(GetServerLogsRequest) returns (GetServerLogsResponse);
+  rpc GetServerConfig(GetServerConfigRequest) returns (GetServerConfigResponse);
+  rpc GetServerFeatures(GetServerFeaturesRequest) returns (GetServerFeaturesResponse);
+  rpc GetServerPlugins(GetServerPluginsRequest) returns (GetServerPluginsResponse);
+  rpc GetServerModules(GetServerModulesRequest) returns (GetServerModulesResponse);
+  rpc GetServerDependencies(GetServerDependenciesRequest) returns (GetServerDependenciesResponse);
+  rpc GetServerEnvironment(GetServerEnvironmentRequest) returns (GetServerEnvironmentResponse);
+  rpc GetServerProcessors(GetServerProcessorsRequest) returns (GetServerProcessorsResponse);
+  rpc GetServerMemory(GetServerMemoryRequest) returns (GetServerMemoryResponse);
+  rpc GetServerDisk(GetServerDiskRequest) returns (GetServerDiskResponse);
+  rpc GetServerNetwork(GetServerNetworkRequest) returns (GetServerNetworkResponse);
+  rpc GetServerServices(GetServerServicesRequest) returns (GetServerServicesResponse);
+  rpc GetServerTasks(GetServerTasksRequest) returns (GetServerTasksResponse);
+  rpc GetServerJobs(GetServerJobsRequest) returns (GetServerJobsResponse);
+  rpc GetServerQueues(GetServerQueuesRequest) returns (GetServerQueuesResponse);
+  rpc GetServerCache(GetServerCacheRequest) returns (GetServerCacheResponse);
+  rpc GetServerConnections(GetServerConnectionsRequest) returns (GetServerConnectionsResponse);
+  rpc GetServerSessions(GetServerSessionsRequest) returns (GetServerSessionsResponse);
+  rpc GetServerEvents(GetServerEventsRequest) returns (GetServerEventsResponse);
+  rpc GetServerNotifications(GetServerNotificationsRequest) returns (GetServerNotificationsResponse);
+  rpc GetServerAlerts(GetServerAlertsRequest) returns (GetServerAlertsResponse);
+  rpc GetServerWarnings(GetServerWarningsRequest) returns (GetServerWarningsResponse);
+  rpc GetServerErrors(GetServerErrorsRequest) returns (GetServerErrorsResponse);
+  rpc GetServerExceptions(GetServerExceptionsRequest) returns (GetServerExceptionsResponse);
+  rpc GetServerStackTraces(GetServerStackTracesRequest) returns (GetServerStackTracesResponse);
+  rpc GetServerThreads(GetServerThreadsRequest) returns (GetServerThreadsResponse);
+  rpc GetServerHandles(GetServerHandlesRequest) returns (GetServerHandlesResponse);
+
+  // Generic G2 (Gen2 REST) procedure passthrough. The procedure name is resolved strictly
+  // against the server-owned G2ProcedureCatalog (all 110 deployed G2 web-service procedures).
+  // Business failures are carried in the response fields (result/err_number/description),
+  // not as gRPC status errors. Gateway-level failures (unknown procedure, missing session,
+  // policy-blocked write, transport failure) use gRPC status codes.
+  rpc CallG2Procedure(G2ProcedureCallRequest) returns (G2ProcedureCallResponse);
+
+  // Generic, catalog-governed SOAP passthrough to the deployed OBERON G1 web services
+  // against the server-owned G1ProcedureCatalog (all 166 documented G1 procedures:
+  // 92 IOBERONService + 61 IOBERONCashRegisterService + 13 IOBERONLoyaltySystemService).
+  // Business failures are carried in the response fields (result/err_number/description),
+  // not as gRPC status errors. Gateway-level failures (unknown procedure, missing session,
+  // blocked policy gate, transport fault) are raised as gRPC status errors.
+  rpc CallG1Procedure(G1ProcedureCallRequest) returns (G1ProcedureCallResponse);
+
+  // Introspection of the server-owned G1 procedure catalog (documentation surface for
+  // GET /api/g1/procedures; gateway-local, no backend call).
+  rpc ListG1Procedures(ListG1ProceduresRequest) returns (ListG1ProceduresResponse);
+
+  // Generic CashRegister-Gen2 (IOBERONServiceCashRegisterGen2 REST) procedure passthrough.
+  // The procedure name is resolved strictly against the server-owned CRG2ProcedureCatalog
+  // (96 deployed CashRegister-Gen2 web-service procedures: 85 generic-callable + 11
+  // gateway-session-owned). Requires an authenticated CashRegister-Gen2 backend session
+  // (login with cashRegisterGen2PasswordHash, see GetLoginSalts.cashRegisterGen2Salt).
+  // Business failures are carried in the response fields (result/err_number/description),
+  // not as gRPC status errors. Gateway-level failures (unknown procedure, missing session,
+  // policy-blocked write, transport fault) use gRPC status codes.
+  rpc CallCRG2Procedure(CRG2ProcedureCallRequest) returns (CRG2ProcedureCallResponse);
+
+  // Introspection of the server-owned CashRegister-Gen2 procedure catalog (documentation
+  // surface; gateway-local, no backend call).
+  rpc ListCRG2Procedures(ListCRG2ProceduresRequest) returns (ListCRG2ProceduresResponse);
+}
+
+message Empty {
+}
+
+message G2ProcedureCallRequest {
+  // Exact G2 procedure name, e.g. "Stock_StockCard_Get". Case-sensitive; see docs/grpc-migration
+  // /ServiceGateway_G2_ProcedureMatrix.md for the full list.
+  string procedure = 1;
+  // JSON object with the procedure arguments (field names documented per procedure).
+  // Empty string or "{}" means argument-less call (GET / no-body procedures only).
+  string json_payload = 2;
+}
+
+message G2ProcedureCallResponse {
+  // G2 envelope result field: true = business success, false = business error
+  // (then err_number/description are set). Missing envelope field => false.
+  bool result = 1;
+  // G2 envelope errNumber (0 when result=true).
+  int32 err_number = 2;
+  // G2 envelope description (localizable error text when result=false).
+  string description = 3;
+  // G2 envelope "data" member serialized as a JSON string ("null" when absent).
+  string data_json = 4;
+  // HTTP status code returned by the G2 REST endpoint (diagnostic only).
+  int32 transport_status = 5;
+}
+
+// ============================================================================
+// Generic G1 SOAP procedure passthrough (catalog-governed, see G1ProcedureCatalog)
+// ============================================================================
+
+message G1ProcedureCallRequest {
+  // Exact G1 procedure name, e.g. "GetStock_StockCards" or, for a secondary interface,
+  // the qualified form "IOBERONCashRegisterService.GetLicences". Case-sensitive;
+  // see GET /api/g1/procedures (ListG1Procedures) for the exact catalog.
+  string procedure = 1;
+  // JSON object whose keys are the DOCUMENTED parameter names of the procedure
+  // (scalars, DTOs by member name, arrays as JSON arrays). "{}" = argument-less call.
+  // The gateway maps this onto the SOAP envelope using the server-owned catalog ONLY;
+  // caller-supplied XML/actions/URLs are never possible.
+  string json_payload = 2;
+}
+
+message G1ProcedureCallResponse {
+  // G1 ResultValue envelope: true = business success, false = business error
+  // (then err_number/description are set). Missing envelope fields => false.
+  bool result = 1;
+  // G1 envelope errNumber (see enm_Err_Basic; 0 when result=true).
+  int32 err_number = 2;
+  // G1 envelope description (localizable error text when result=false).
+  string description = 3;
+  // G1 envelope "data" member serialized as a JSON string ("null" when absent).
+  // Operations returning Stream carry {"base64": "..."} here.
+  // Operations with a bare (non-ResultValue) return are wrapped as {"value": "..."}.
+  string data_json = 4;
+  // Echo of the resolved catalog name (bare form, e.g. "GetLicences").
+  string procedure = 5;
+  // Echo of the owning G1 interface, e.g. "IOBERONService".
+  string interface_name = 6;
+  // HTTP status code returned by the G1 SOAP endpoint (diagnostic only).
+  int32 transport_status = 7;
+}
+
+message ListG1ProceduresRequest {
+  // Optional substring filter on procedure names (case-insensitive).
+  string name_filter = 1;
+  // Optional filter matching the interface name (e.g. "CashRegister").
+  string interface_filter = 2;
+  // Optional EXACT procedure name (case-insensitive equality; used by GET /api/g1/procedures/{name}).
+  string exact_name = 3;
+}
+
+message G1ProcedureDescriptorMsg {
+  string name = 1;
+  // "IOBERONService" | "IOBERONCashRegisterService" | "IOBERONLoyaltySystemService".
+  string interface_name = 2;
+  // Declared parameter list "Type name, Type name" ("" = argument-less).
+  string args = 3;
+  // Declared return type, e.g. "ResultValue<StockCardData>".
+  string returns = 4;
+  // Read | Write | Destructive | SessionControl.
+  string procedure_class = 5;
+  // Native G1 WebHTTP verb metadata (GET|POST).
+  string http_method = 6;
+  // Native G1 WebHTTP URI template metadata.
+  string uri_template = 7;
+  // False for SessionControl procedures (gateway login surface owns those).
+  bool generic_callable = 8;
+  // Minimal JSON request example (documented parameters with zero values).
+  string example_json = 9;
+}
+
+message ListG1ProceduresResponse {
+  bool result = 1;
+  // Total catalog size (independent of filters).
+  int32 total = 2;
+  repeated G1ProcedureDescriptorMsg procedures = 3;
+}
+
+// ============================================================================
+// Generic CashRegister-Gen2 REST procedure passthrough (catalog-governed, see CRG2ProcedureCatalog)
+// ============================================================================
+
+message CRG2ProcedureCallRequest {
+  // Exact CashRegister-Gen2 procedure name, e.g. "CashRegister_BillOpen_List". Case-sensitive;
+  // see ListCRG2Procedures for the exact catalog.
+  string procedure = 1;
+  // JSON object with the procedure arguments (field names documented per procedure).
+  // Empty string or "{}" means argument-less call (GET / no-body procedures only).
+  string json_payload = 2;
+}
+
+message CRG2ProcedureCallResponse {
+  // Backend envelope result field: true = business success, false = business error
+  // (then err_number/description are set). Missing envelope field => false.
+  bool result = 1;
+  // Envelope errNumber (0 when result=true).
+  int32 err_number = 2;
+  // Envelope description (localizable error text when result=false).
+  string description = 3;
+  // Envelope "data" member serialized as a JSON string ("null" when absent).
+  string data_json = 4;
+  // HTTP status code returned by the CashRegister-Gen2 REST endpoint (diagnostic only).
+  int32 transport_status = 5;
+}
+
+message ListCRG2ProceduresRequest {
+  // Optional substring filter on procedure names (case-insensitive).
+  string name_filter = 1;
+  // Optional EXACT procedure name (case-insensitive equality).
+  string exact_name = 2;
+}
+
+message CRG2ProcedureDescriptorMsg {
+  string name = 1;
+  // HTTP verb used by the deployed endpoint (Get | Post | Delete).
+  string http_method = 2;
+  // REST path relative to Gen2CashRegisterBaseAddress, e.g. "v1/cashregister/bill-open/list".
+  string uri_template = 3;
+  // Read | Write | Destructive | Session.
+  string procedure_class = 4;
+  // False for Session procedures (gateway session machinery owns those).
+  bool generic_callable = 5;
+}
+
+message ListCRG2ProceduresResponse {
+  bool result = 1;
+  // Total catalog size (independent of filters).
+  int32 total = 2;
+  repeated CRG2ProcedureDescriptorMsg procedures = 3;
+}

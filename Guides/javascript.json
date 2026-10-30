@@ -1,0 +1,33 @@
+{
+  "slug": "javascript",
+  "name": "JavaScript",
+  "intro": "Samostatný JavaScript klient pre bezpečný test dostupnosti OBERON ServiceGateway pomocou jediného RPC Ping.",
+  "prerequisites": "Node.js 22+ a npm; prístup k serveru cez dôveryhodnú LAN.",
+  "steps": [
+    {
+      "title": "Inštalácia závislostí",
+      "text": "Príkaz spustite v koreňovom priečinku rozbaleného balíka.",
+      "command": "npm install"
+    },
+    {
+      "title": "Dynamický kontrakt a offline testy",
+      "text": "@grpc/proto-loader načíta proto/oberon_service_grpc.proto za behu podľa umiestnenia client.js; @grpc/grpc-js vytvorí klienta. Generovanie kódu nie je potrebné. Testy argumentov server nekontaktujú.",
+      "command": "npm test"
+    },
+    {
+      "title": "Ping",
+      "text": "Očakávaná úspešná odpoveď má tvar Ping -> pong. Ide o vysvetlenie, nie o záznam aktuálneho behu.",
+      "command": "node client.js --host 192.168.16.169 --port 21008"
+    }
+  ],
+  "exampleFile": "client.js",
+  "notes": [
+    "Ide o natívne gRPC cez HTTP/2. Tento klient nie je určený pre prehliadač; prehliadač potrebuje gRPC-Web a kompatibilný server alebo proxy.",
+    "Ukážka používa nešifrované spojenie (plaintext), iba v dôveryhodnej LAN. Mimo nej nakonfigurujte TLS a overovanie certifikátu.",
+    "Ping nevyžaduje prihlásenie. Klient posiela iba Ping, má deadline 10 sekúnd a po skončení zatvorí kanál.",
+    "Pri budúcom rozšírení autentifikácie zavolajte GetLoginSalts s username. Pre dostupné backendy vypočítajte SHA1(salt + password) z bajtov Windows-1250 (cp1250), ako hexadecimálny reťazec. Do LoginUser vložte gen1PasswordHash, gen2PasswordHash a prípadne cashRegisterGen2PasswordHash podľa príslušných saltov. Skontrolujte result; sessionId odošlite v metadata s kľúčom userdata. Tajomstvá a sessionId nelogujte. Táto ukážka autentifikáciu nevykonáva.",
+    "Host zadávajte ako DNS názov alebo IPv4 adresu bez http:// a bez portu; port je samostatné --port číslo 1 až 65535. Predvolené hodnoty sú 192.168.16.169 a 21008.",
+    "Pri opakovanom testovaní ponechajte medzi volaniami aspoň 5 sekúnd. Úspešný Ping neoveruje autentifikáciu ani obchodné operácie."
+  ],
+  "example": "function parseArgs(argv) {\n  const options = {host: '192.168.16.169', port: 21008};\n  for (let i = 0; i < argv.length; i += 2) {\n    const flag = argv[i];\n    const value = argv[i + 1];\n    if (!['--host', '--port'].includes(flag) || value === undefined)\n      throw new Error('Usage: node client.js [--host DNS-or-IPv4] [--port 1..65535]');\n    if (flag === '--host') {\n      if (!/^[A-Za-z0-9._-]+$/.test(value)) throw new Error('Invalid host (no scheme or port)');\n      options.host = value;\n    } else {\n      if (!/^[0-9]+$/.test(value) || Number(value) < 1 || Number(value) > 65535)\n        throw new Error('Port must be an integer from 1 to 65535');\n      options.port = Number(value);\n    }\n  }\n  return options;\n}\n\nasync function main(argv = process.argv.slice(2)) {\n  const {host, port} = parseArgs(argv);\n  const path = require('node:path');\n  const grpc = require('@grpc/grpc-js');\n  const loader = require('@grpc/proto-loader');\n  const definition = loader.loadSync(path.join(__dirname, 'proto', 'oberon_service_grpc.proto'));\n  const service = grpc.loadPackageDefinition(definition).oberon.servicegateway;\n  const client = new service.OBERONServiceGRPC(`${host}:${port}`, grpc.credentials.createInsecure());\n  try {\n    const response = await new Promise((resolve, reject) => {\n      client.Ping({message: 'hello'}, {deadline: new Date(Date.now() + 10000)},\n        (error, result) => error ? reject(error) : resolve(result));\n    });\n    console.log(`Ping -> ${response.message}`);\n  } finally {\n    client.close();\n  }\n}\nmodule.exports = {parseArgs, main};\nif (require.main === module) {\n  main().catch(error => {\n    console.error(`Error: ${error.details || error.message}`);\n    process.exitCode = 1;\n  });\n}\n"
+}
